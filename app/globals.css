@@ -2,7 +2,11 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f2937;
+  --primary: #0997AA;
+  --secondary: #262263;
+  --font-geist-sans: "Inter", "Segoe UI", Arial, sans-serif;
+  --font-geist-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 @theme inline {
@@ -12,15 +16,142 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: rgba(9, 151, 170, 0.25);
+  color: #0f172a;
+}
+
+button, a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.icon-submenu {
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    border-top: 6px solid #0b97ab;
+    border-bottom: 6px solid transparent;
+    top: 5px;
+    position: relative;
+}
+
+.icon-submenu.rotate-180 {
+    bottom: -18px;
+    top: auto;
+}
+
+.pattern {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255, .05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: moveGrid 10s linear infinite;
+}
+
+.pattern::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center,
+            transparent,
+            rgba(15,23,42,.7));
+}
+
+@keyframes moveGrid {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 60px 60px;
+    }
+}
+
+.animated {
+    animation-duration: 0.8s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-out;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fadeInLeft {
+    animation-name: fadeInLeft;
+}
+
+.fadeInRight {
+    animation-name: fadeInRight;
+}
+
+.fadeInUp {
+    animation-name: fadeInUp;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.globally-section + .stats-section {
+   padding-top: 220px;
+   padding-bottom: 60px;
+}
+
+.globally-section.hero-section .globally {
+    margin-bottom: -160px;
+    z-index: 2;
+}
+
+.video-section + .counters-section {
+    margin-top: 0;
+    background: #ffffff;
+    padding-top: 420px;
+    z-index: -1;
+}
+
+.video-section.hero-section .video {
+    margin-bottom: -440px;
 }

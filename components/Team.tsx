@@ -1,14 +1,14 @@
 import ScrollReveal from "./ScrollReveal";
 
-type Stat = { image: { node: { sourceUrl: string } }; label: string }; 
+type solution = { icon: { node: { sourceUrl: string } }; valuee: string }; 
 
-export default function Stats({ stats, heading, subheading }: { stats: Stat[]; heading: string; subheading: string }) {
+export default function Team({ solutions, heading, subheading }: { solutions: solution[]; heading: string; subheading: string }) {
   return (
-    <section className="border-y border-[#262263]/10 bg-[linear-gradient(135deg,#0997AA_0%,#262262_100%)] px-6 py-10 lg:px-8 relative stats-section">
-      <div className="pattern"></div>
+    <section className="bg-white/10 px-6 py-10 lg:px-8 relative">
+     
       <div className="mx-auto grid max-w-7xl relative z-2 grid-cols-1 gap-0">
         <ScrollReveal animation="fadeInLeft">
-          <h2 className="text-xl font-bold leading-[1.05] text-white sm:text-2xl lg:text-3xl mb-2 uppercase flex flex-row items-center gap-4">
+          <h2 className="max-w-3xl text-xl font-semibold leading-[1.05] text-[#262263] sm:text-2xl lg:text-3xl flex flex-row gap-4 items-center">
             <svg width="30px" height="30px" viewBox="0 0 270 236" version="1.1">
               <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                   <g id="NEXVORA-" transform="translate(-1917, -683)" fill="#0997AA" fillRule="nonzero">
@@ -20,26 +20,29 @@ export default function Stats({ stats, heading, subheading }: { stats: Stat[]; h
           </h2>
         </ScrollReveal>
         <ScrollReveal animation="fadeInLeft" delay={120}>
-          <p className="text-md  max-w-3xl leading-8 text-white/80 relative z-2 mb-12">
+          <p className="mt-4 text-md leading-8 text-slate-600 max-w-3xl">
             {subheading}
           </p>
         </ScrollReveal>
       </div>
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-2 relative z-2">
-        {stats.map((stat, index) => (
-          <ScrollReveal key={stat.label} animation="fadeInLeft" delay={index * 120}>
+
+      <div className="mt-6 mx-auto grid max-w-7xl grid-cols-1 gap-6 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 relative z-2">
+        {solutions.map((item, index) => (
+          <ScrollReveal key={item.valuee} animation="fadeInUp" delay={index * 120}>
             <div 
-              className="rounded-md border flex items-center gap-6 border-white/10 bg-black/40 px-5 py-3 backdrop-blur opacity-90 transition-opacity hover:opacity-100"
+              className="group flex items-center justify-center gap-2 text-left"
             >
-            {stat.image.node.sourceUrl && (
-              <img
-                key={stat.label}
-                src={stat.image.node.sourceUrl}
-                alt={stat.label}
-                className="h-12 w-12 object-contain"
-              />
+            {item.icon.node.sourceUrl && (
+              <div className="rounded-md border flex items-center justify-center border-[#0b97ab]/10 bg-[#0b97ab] h-18 w-30 p-3 backdrop-blur opacity-80 transition-opacity group-hover:opacity-100">
+                  <img
+                      key={item.valuee}
+                      src={item.icon.node.sourceUrl}
+                      alt={item.valuee}
+                      className="w-full object-contain"
+                  />
+              </div>
             )}
-              <p className="m-0 text-lg text-white">{stat.label}</p>
+              <p className="m-0 font-bold text-md text-[#262263] group-hover:text-[#0997AA] transition-colors">{item.valuee}</p>
             </div>
           </ScrollReveal>
         ))}

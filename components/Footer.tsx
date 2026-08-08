@@ -1,11 +1,13 @@
+import ScrollReveal from "./ScrollReveal";
+
 const COLUMNS = [
   {
     title: "Company",
-    links: ["About us", "Team", "Process", "Blog", "Case studies", "Join us"],
+    links: ["Home", "About us", "Blog", "Contact"],
   },
   {
     title: "Technologies",
-    links: [".Net", "Android", "Angular", "iOS", "PHP Laravel", "Node.js"],
+    links: ["Android", "iOS", "PHP Laravel", "Node.js"],
   },
   {
     title: "Services",
@@ -18,35 +20,68 @@ const COLUMNS = [
   },
 ];
 
-export default function Footer() {
+type FooterProps = {
+  bgimageurl?: string;
+  ctaLabel?: string;
+  ctaLink?: string;
+};
+
+
+export default function Footer({ bgimageurl, ctaLabel, ctaLink }: FooterProps) {
   return (
-    <footer className="bg-ink px-6 py-16 text-white/60">
-      <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-4">
-        <div>
-          <p className="font-display text-lg text-white">YourAgency</p>
-          <p className="mt-3 max-w-xs font-body text-sm">
-            Build scalable, high-performance software solutions with
-            dedicated teams that adapt to your business goals.
-          </p>
+    <div className="relative overflow-hidden">
+      {bgimageurl && (
+        <div
+          className="absolute inset-0 bg-cover bg-top-right bg-no-repeat"
+          style={{ backgroundImage: `url(${bgimageurl})` }}
+        />
+      )}
+      <section className="text-[#262263] px-6 py-24 text-center lg:px-8 relative">
+        <div className="mx-auto max-w-3xl relative z-2">
+          <ScrollReveal animation="fadeInUp">
+            <h2 className="text-3xl font-semibold sm:text-xl">Ready to start your next project?</h2>
+          </ScrollReveal>
+          <ScrollReveal animation="fadeInUp" delay={120}>
+            <p className="mt-4 text-lg text-[#262263]/80">Bring your idea to life with a team that blends strategy, design, and engineering.</p>
+          </ScrollReveal>
+          <ScrollReveal animation="fadeInUp" delay={240}>
+            <a
+              href={ctaLink}
+              className="mt-8 inline-block rounded-md bg-[#262263] px-8 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+            >
+              {ctaLabel}
+            </a>
+          </ScrollReveal>
         </div>
-        {COLUMNS.map((col) => (
-          <div key={col.title}>
-            <p className="font-mono text-xs uppercase tracking-wide text-white/40">
-              {col.title}
+      </section>
+      
+      <footer className="px-6 py-18 text-[#262263] lg:px-8 relative z-2">
+        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-4">
+          <div>
+            <div className="flex items-center gap-3">
+              <img src="/logo.svg" alt="NEXVORA logo" className="h-14 w-auto" />
+            </div>
+            <p className="mt-4 max-w-xs text-sm leading-7 text-[#262263]">
+              INNOVATION, QUALITY, AND EXCEPTIONAL CUSTOMER SERVICE.
             </p>
-            <ul className="mt-4 space-y-2">
-              {col.links.map((link) => (
-                <li key={link} className="font-body text-sm">
-                  {link}
-                </li>
-              ))}
-            </ul>
           </div>
-        ))}
-      </div>
-      <p className="mx-auto mt-12 max-w-6xl border-t border-line pt-6 font-mono text-xs text-white/30">
-        © YourAgency, {new Date().getFullYear()}
-      </p>
-    </footer>
+          {COLUMNS.map((col) => (
+            <div key={col.title}>
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#262263]/40">
+                {col.title}
+              </p>
+              <ul className="mt-4 space-y-2 text-sm text-[#262263]">
+                {col.links.map((link) => (
+                  <li key={link}>{link}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p className="mx-auto mt-12 max-w-7xl border-t border-[#262263]/40 pt-6 text-xs text-[#262263]/60 relative z-2">
+        copyright reserved © NEXVORA, {new Date().getFullYear()}
+        </p>
+      </footer>
+    </div>
   );
 }

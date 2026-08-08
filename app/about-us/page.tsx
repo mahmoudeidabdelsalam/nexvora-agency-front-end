@@ -1,14 +1,10 @@
 import { getHomepageData } from "@/lib/wordpress";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Stats from "@/components/Stats";
-import Team from "@/components/Team";
 import Counters from "@/components/Counters";
-import Testimonials from "@/components/Testimonials";
 import { ClientLogos } from "@/components/ClientLogosAndCta";
 import Footer from "@/components/Footer";
-import CoreValues from "@/components/CoreValues";
-import Projects from "@/components/Projects";
+import BoxAbout from "@/components/BoxAbout";
 
 // Revalidate hourly by default; on-demand revalidation via /api/revalidate
 // (wired to a WordPress publish webhook) overrides this for fast updates.
@@ -18,6 +14,7 @@ export default async function HomePage() {
   const data = await getHomepageData();
   const { homepageFields } = data.homepageSettings;
   const { headerFields } = data.headerSettings;
+  const { aboutpageFields } = data.aboutPageSettings;
 
   return (
     <>
@@ -27,25 +24,22 @@ export default async function HomePage() {
         ctaLabel={headerFields.labelButtonRight || "Let’s talk"}
         ctaHref={headerFields.linkButtonRight?.url || "/contact"}
       />
-      <main>
+      <main className="relative overflow-hidden pb-12">
         <Hero
-          eyebrow={homepageFields.heroEyebrow}
-          heading={homepageFields.heroHeading}
-          subtext={homepageFields.heroSubtext}
+          eyebrow={aboutpageFields.aboutTag}
+          heading={aboutpageFields.aboutHeadline}
+          subtext={aboutpageFields.aboutSubText}
+          video={aboutpageFields.aboutVideo}
           ctaLabel={homepageFields.heroCtaLabel}
           ctaLink={homepageFields.heroCtaLink}
           bgimageurl={homepageFields.bgimageurl?.node.sourceUrl}
-          globallyHeadline={homepageFields.globallyHeadline}
-          globallySubtext={homepageFields.globallySubtext}
-          globallyImage={homepageFields.globallyImage?.node.sourceUrl}
+          globallyHeadline={""}
+          globallySubtext={""}
+          globallyImage={""}
         />
-        <Stats stats={homepageFields.ourExpertise} heading={homepageFields.expertiseHeadline ?? ""} subheading={homepageFields.expertiseSubText ?? ""} />
-        <Team solutions={homepageFields.solutions} heading={homepageFields.teamHeadline ?? ""} subheading={homepageFields.teamSubText ?? ""} />
-        <CoreValues coreValues={homepageFields.coreValues} heading={homepageFields.coreHeadline ?? ""} subheading={homepageFields.coreSubText ?? ""} image={homepageFields.coreImageLeft ?? { node: { sourceUrl: "" } }} />
         <Counters counters={homepageFields.counters} heading={homepageFields.countersHeadline ?? ""} subheading={homepageFields.countersSubText ?? ""} />
-        <Projects projects={homepageFields.projects} />
         <ClientLogos logos={homepageFields.clientLogos} />
-        <Testimonials testimonials={data.allTestimonials.nodes} />
+        <BoxAbout boxAbout={aboutpageFields.boxAbout} />
       </main>
       <Footer bgimageurl={homepageFields.bgimageurl?.node.sourceUrl} ctaLabel={homepageFields.heroCtaLabel} ctaLink={homepageFields.heroCtaLink} />
     </>

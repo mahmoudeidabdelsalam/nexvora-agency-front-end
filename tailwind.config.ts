@@ -1,23 +1,22 @@
 import type { Config } from "tailwindcss";
 
-// Design tokens for a software/tech agency homepage.
-// Palette: graphite ink base, off-white panels, a single cobalt signal color
-// used sparingly (status-light metaphor — the one thing "on" on the page).
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        ink: "#12151C",       // near-black graphite, not pure black
-        panel: "#F7F7F5",     // off-white section background
-        signal: "#3B6CF6",    // cobalt accent — the "status light"
-        signalDim: "#1E2A55", // dark cobalt for hover/borders on ink bg
-        line: "#22262F",      // hairline borders on dark sections
+        ink: "#0f172a",
+        panel: "#f7fbfc",
+        signal: "#0997AA",
+        signalDim: "#262263",
+        line: "#dcebf0",
+        primary: "#0997AA",
+        secondary: "#262263",
       },
       fontFamily: {
-        display: ["var(--font-display)", "sans-serif"],
-        body: ["var(--font-body)", "sans-serif"],
-        mono: ["var(--font-mono)", "monospace"],
+        display: ["var(--font-geist-sans)", "sans-serif"],
+        body: ["var(--font-geist-sans)", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "monospace"],
       },
     },
   },
