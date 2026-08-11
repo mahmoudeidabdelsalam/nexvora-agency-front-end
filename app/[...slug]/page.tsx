@@ -14,6 +14,7 @@ export default async function CatchAllPage({
   const slug = resolvedParams.slug?.join("/") ?? "";
   const normalizedSlug = slug ? `/${slug}` : "/";
   const data = await getHomepageData();
+  const { homepageFields } = data.homepageSettings;
   const page = await getPageBySlug(normalizedSlug);
   const { headerFields } = data.headerSettings;
 
@@ -37,7 +38,7 @@ export default async function CatchAllPage({
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer bgimageurl={homepageFields.bgimageurl?.node.sourceUrl} ctaLabel={homepageFields.heroCtaLabel} ctaLink={homepageFields.heroCtaLink} />
     </>
   );
 }

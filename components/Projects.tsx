@@ -2,10 +2,10 @@ import ScrollReveal from "./ScrollReveal";
 
 type project = { projectsHeadline: string; projectsSubText: string; projectsImage: { node: { sourceUrl: string } }; projectsBgColor: string, projectsLink: string, projectsTextColor: string };
 
-export default function Projects({ projects }: { projects: project[]; }) {
+export default function Projects({ projects, widthCol }: { projects: project[]; widthCol: string; }) {
   return (
     <section className="bg-white/10 px-6 lg:px-8 pb-10 relative">
-      <div className="mx-auto grid max-w-7xl relative z-2 grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className={`mx-auto grid max-w-7xl relative z-2 grid-cols-1 lg:grid-cols-${widthCol} gap-6`}>
         {projects.map((item, index) => (
           <ScrollReveal key={index} animation="fadeInUp" delay={index * 120}>
             <div 
@@ -19,7 +19,7 @@ export default function Projects({ projects }: { projects: project[]; }) {
                     key={index}
                     src={item.projectsImage.node.sourceUrl}
                     alt={item.projectsHeadline}
-                    className="w-80 object-contain rounded-md group-hover:scale-105 transition-transform duration-300"
+                    className={`${widthCol === "1" ? "w-auto": "w-80"} object-contain rounded-md group-hover:scale-105 transition-transform duration-300`}
                   />
                 )}
               </div>

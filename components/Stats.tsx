@@ -1,8 +1,8 @@
+import Link from "next/link";
 import ScrollReveal from "./ScrollReveal";
+import type { Services } from "@/lib/wordpress";
 
-type Stat = { image: { node: { sourceUrl: string } }; label: string }; 
-
-export default function Stats({ stats, heading, subheading }: { stats: Stat[]; heading: string; subheading: string }) {
+export default function Stats({ stats, heading, subheading }: { stats: Services[]; heading: string; subheading: string }) {
   return (
     <section className="border-y border-[#262263]/10 bg-[linear-gradient(135deg,#0997AA_0%,#262262_100%)] px-6 py-10 lg:px-8 relative stats-section">
       <div className="pattern"></div>
@@ -27,20 +27,20 @@ export default function Stats({ stats, heading, subheading }: { stats: Stat[]; h
       </div>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-2 relative z-2">
         {stats.map((stat, index) => (
-          <ScrollReveal key={stat.label} animation="fadeInLeft" delay={index * 120}>
-            <div 
+          <ScrollReveal key={index} animation="fadeInLeft" delay={index * 120}>
+            <Link 
               className="rounded-md border flex items-center gap-6 border-white/10 bg-black/40 px-5 py-3 backdrop-blur opacity-90 transition-opacity hover:opacity-100"
+               href={`/service/${stat.slug}`}
             >
-            {stat.image.node.sourceUrl && (
-              <img
-                key={stat.label}
-                src={stat.image.node.sourceUrl}
-                alt={stat.label}
-                className="h-12 w-12 object-contain"
-              />
-            )}
-              <p className="m-0 text-lg text-white">{stat.label}</p>
-            </div>
+              {stat?.serviceFields?.icon?.node?.sourceUrl && (
+                <img
+                  src={stat?.serviceFields?.icon?.node?.sourceUrl}
+                  alt={stat?.serviceFields?.icon?.node?.altText ?? ""}
+                  className="h-12 w-12 object-contain"
+                />
+              )}
+              <p className="m-0 text-lg text-white">{stat.title}</p>
+            </Link>
           </ScrollReveal>
         ))}
       </div>

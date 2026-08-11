@@ -1,4 +1,4 @@
-import { getHomepageData } from "@/lib/wordpress";
+import { getHomepageData, getServices } from "@/lib/wordpress";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Stats from "@/components/Stats";
@@ -16,9 +16,9 @@ export const revalidate = 3600;
 
 export default async function HomePage() {
   const data = await getHomepageData();
+  const services = await getServices();
   const { homepageFields } = data.homepageSettings;
   const { headerFields } = data.headerSettings;
-
   return (
     <>
       <Header
@@ -39,11 +39,11 @@ export default async function HomePage() {
           globallySubtext={homepageFields.globallySubtext}
           globallyImage={homepageFields.globallyImage?.node.sourceUrl}
         />
-        <Stats stats={homepageFields.ourExpertise} heading={homepageFields.expertiseHeadline ?? ""} subheading={homepageFields.expertiseSubText ?? ""} />
+        <Stats stats={services} heading={homepageFields.expertiseHeadline ?? ""} subheading={homepageFields.expertiseSubText ?? ""} />
         <Team solutions={homepageFields.solutions} heading={homepageFields.teamHeadline ?? ""} subheading={homepageFields.teamSubText ?? ""} />
         <CoreValues coreValues={homepageFields.coreValues} heading={homepageFields.coreHeadline ?? ""} subheading={homepageFields.coreSubText ?? ""} image={homepageFields.coreImageLeft ?? { node: { sourceUrl: "" } }} />
         <Counters counters={homepageFields.counters} heading={homepageFields.countersHeadline ?? ""} subheading={homepageFields.countersSubText ?? ""} />
-        <Projects projects={homepageFields.projects} />
+        <Projects projects={homepageFields.projects} widthCol="2" />
         <ClientLogos logos={homepageFields.clientLogos} />
         <Testimonials testimonials={data.allTestimonials.nodes} />
       </main>

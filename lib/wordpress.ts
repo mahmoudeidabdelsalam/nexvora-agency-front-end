@@ -2,25 +2,26 @@ const WP_GRAPHQL_URL = process.env.WORDPRESS_GRAPHQL_URL as string; // e.g. http
 
 export type allServices = {
   title: string;
+  slug: string;
   serviceFields: {
     summary: string;
     icon: { node: { sourceUrl: string; altText: string } } | null;
   };
 };
 
-export type Service = allServices;
+export type Services = allServices;
 
-export type caseStudies = {
-  title: string;
-  caseStudyFields: {
-    clientName: string;
-    excerpt: string;
-    thumbnail: { node: { sourceUrl: string; altText: string } } | null;
-    linkUrl: string;
-  };
-};
+// export type caseStudies = {
+//   title: string;
+//   caseStudyFields: {
+//     clientName: string;
+//     excerpt: string;
+//     thumbnail: { node: { sourceUrl: string; altText: string } } | null;
+//     linkUrl: string;
+//   };
+// };
 
-export type CaseStudy = caseStudies;
+// export type CaseStudy = caseStudies;
 
 export type allTestimonials = {
   testimonialFields: {
@@ -42,23 +43,30 @@ export type HomepageSettings = {
     heroCtaLabel: string;
     heroCtaLink: string;
     bgimageurl?: { node: { sourceUrl: string } };
+
     globallyHeadline: string;
     globallySubtext: string;
     globallyImage?: { node: { sourceUrl: string } };
+
     expertiseHeadline?: string;
     expertiseSubText?: string;
     ourExpertise: { image: { node: { sourceUrl: string } }; label: string }[];
+
     teamHeadline?: string;
     teamSubText?: string;
     solutions: { icon: { node: { sourceUrl: string } }; valuee: string }[];
+
     coreHeadline?: string;
     coreSubText?: string;
     coreImageLeft?: { node: { sourceUrl: string } };
     coreValues: { icon: { node: { sourceUrl: string } }; valuee: string; text?: string }[];
+
     countersHeadline?: string;
     countersSubText?: string;
     counters: { text: string; valuee: string }[];
+
     projects: { projectsHeadline: string; projectsSubText: string; projectsImage: { node: { sourceUrl: string } }; projectsBgColor: string, projectsLink: string, projectsTextColor: string }[];
+
     clientLogos: { name: string; logo: { node: { sourceUrl: string } } }[];
   };
 };
@@ -70,6 +78,25 @@ export type AboutPageSettings = {
     aboutSubText: string;
     aboutVideo?: string;
     boxAbout: { boxHeadline: string; boxSubText: string; boxImage: { node: { sourceUrl: string } }; boxBgColor: string, boxTextColor: string }[];
+  };
+};
+
+export type ContactInformation = {
+  icon?: {
+    node?: {
+      sourceUrl?: string;
+    } | null;
+  } | null;
+  text: string;
+  link?: string | null;
+};
+
+export type ContactPageSettings = {
+  contactPageFields: {
+    contactHeadline: string;
+    contactSubText: string;
+    contactInformation: ContactInformation[];
+    contactMap?: string | null;
   };
 };
 
@@ -85,7 +112,38 @@ export type WpPost = {
   title: string;
   excerpt: string;
   content: string;
+  featuredImage?: {
+    node?: {
+      sourceUrl?: string;
+      altText?: string;
+      mediaDetails?: {
+        width?: number;
+        height?: number;
+      };
+    };
+  };
   uri?: string | null;
+};
+
+export type Service = {
+  slug: string;
+  title: string;
+  content: string;
+  featuredImage?: {
+    node?: {
+      sourceUrl?: string;
+      altText?: string;
+      mediaDetails?: {
+        width?: number;
+        height?: number;
+      };
+    };
+  };
+  serviceFields: {
+    summary?: string;
+    icon?: { node: { sourceUrl: string; altText: string } } | null;
+    projects: { projectsHeadline: string; projectsSubText: string; projectsImage: { node: { sourceUrl: string } }; projectsBgColor: string, projectsLink: string, projectsTextColor: string }[];
+  };
 };
 
 export type HeaderSettings = {
@@ -102,8 +160,6 @@ export type HeaderSettings = {
 };
 
 export type HomepageData = {
-  allServices: { nodes: allServices[] };
-  caseStudies: { nodes: caseStudies[] };
   allTestimonials: { nodes: allTestimonials[] };
   homepageSettings: HomepageSettings;
   aboutPageSettings: AboutPageSettings;
@@ -112,26 +168,6 @@ export type HomepageData = {
 
 const HOMEPAGE_QUERY = /* GraphQL */ `
 query {
-  allServices(first: 10) {
-    nodes {
-      title
-      serviceFields {
-        summary
-        icon { node { sourceUrl altText } }
-      }
-    }
-  }
-  caseStudies(first: 6) {
-    nodes {
-      title
-      caseStudyFields {
-        clientName
-        excerpt
-        thumbnail { node { sourceUrl altText } }
-        linkUrl
-      }
-    }
-  }
   allTestimonials(first: 10) {
     nodes {
       testimonialFields {
@@ -223,185 +259,84 @@ query BlogPosts {
       title
       excerpt
       content
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            width
+            height
+          }
+        }
+      }
       uri
     }
   }
 }
 `;
 
-const FALLBACK_DATA: HomepageData = {
-  allServices: {
-    nodes: [
-      {
-        title: "Product strategy",
-        serviceFields: {
-          summary: "Turn complex ideas into focused roadmaps and launch-ready product plans.",
-          icon: null,
-        },
-      },
-      {
-        title: "Web & mobile engineering",
-        serviceFields: {
-          summary: "Build fast, reliable applications that scale with your users and operations.",
-          icon: null,
-        },
-      },
-      {
-        title: "Design systems",
-        serviceFields: {
-          summary: "Create polished interfaces and reusable experiences that feel consistent everywhere.",
-          icon: null,
-        },
-      },
-      {
-        title: "Growth & innovation",
-        serviceFields: {
-          summary: "Launch AI-enabled experiences and modern digital products with measurable impact.",
-          icon: null,
-        },
-      },
-    ],
-  },
-  caseStudies: {
-    nodes: [
-      {
-        title: "Customer-first platform refresh",
-        caseStudyFields: {
-          clientName: "ScaleLab",
-          excerpt: "We redesigned a product experience and helped accelerate onboarding and retention.",
-          thumbnail: null,
-          linkUrl: "#",
-        },
-      },
-      {
-        title: "Operational automation suite",
-        caseStudyFields: {
-          clientName: "Northstar",
-          excerpt: "A custom workflow platform enabled faster execution across teams and regions.",
-          thumbnail: null,
-          linkUrl: "#",
-        },
-      },
-      {
-        title: "AI-powered content experience",
-        caseStudyFields: {
-          clientName: "Brightline",
-          excerpt: "We delivered an intelligent content engine with speed, clarity, and flexibility.",
-          thumbnail: null,
-          linkUrl: "#",
-        },
-      },
-    ],
-  },
-  allTestimonials: {
-    nodes: [
-      {
-        testimonialFields: {
-          quote: "They brought structure, speed, and thoughtful execution to every milestone.",
-          authorName: "Mina Hassan",
-          authorRole: "Founder",
-          authorCompany: "Northstar Labs",
-          avatar: null,
-        },
-      },
-    ],
-  },
-  homepageSettings: {
-    homepageFields: {
-      heroEyebrow: "Digital product studio",
-      heroHeading: "We create modern digital experiences that move brands forward.",
-      heroSubtext: "From strategy to launch, we help ambitious teams craft fast, scalable, and beautifully designed products.",
-      heroCtaLabel: "Book a discovery call",
-      heroCtaLink: "/contact",
-      bgimageurl: undefined,
-      globallyHeadline: "Trusted by product teams scaling with confidence",
-      globallySubtext: "We blend strategy, building, and long-term support into one collaborative partnership.",
-      globallyImage: undefined,
-      expertiseHeadline: "Our expertise",
-      expertiseSubText: "We help ambitious teams craft fast, scalable, and beautifully designed products.",
-      teamHeadline: "Our team",
-      teamSubText: "We are a team of product designers, engineers, and strategists who love building digital products.",
-      solutions: [
-        { icon: { node: { sourceUrl: "" } }, valuee: "Product strategy" },
-        { icon: { node: { sourceUrl: "" } }, valuee: "Web & mobile engineering" },
-        { icon: { node: { sourceUrl: "" } }, valuee: "Design systems" },
-        { icon: { node: { sourceUrl: "" } }, valuee: "Growth & innovation" },
-      ],
-      ourExpertise: [
-        { image: { node: { sourceUrl: "" } }, label: "13+ Years of product delivery" },
-        { image: { node: { sourceUrl: "" } }, label: "150+ Projects launched" },
-        { image: { node: { sourceUrl: "" } }, label: "98% Client retention" },
-        { image: { node: { sourceUrl: "" } }, label: "24/7   Support coverage" },
-      ],
-      coreHeadline: "Our core values",
-      coreSubText: "We are a team of product designers, engineers, and strategists who love building digital products.",
-      coreImageLeft: undefined,
-      coreValues: [
-        { icon: { node: { sourceUrl: "" } }, valuee: "Collaboration", text: "We work closely with our clients and each other to achieve the best results." },
-        { icon: { node: { sourceUrl: "" } }, valuee: "Innovation", text: "We constantly seek new ways to improve and innovate." },
-        { icon: { node: { sourceUrl: "" } }, valuee: "Integrity", text: "We act with honesty and transparency in all our interactions." },
-        { icon: { node: { sourceUrl: "" } }, valuee: "Excellence", text: "We strive for the highest quality in everything we do." },
-      ],
-      countersHeadline: "Our impact in numbers",
-      countersSubText: "We are a team of product designers, engineers, and strategists who love building digital products.",
-      counters: [
-        { text: "Years of product delivery", valuee: "13+" },
-        { text: "Projects launched", valuee: "150+" },
-        { text: "Client retention", valuee: "98%" },
-        { text: "Support coverage", valuee: "24/7" },
-      ],
-      projects: [
-        { projectsHeadline: "Project 1", projectsSubText: "Description of project 1", projectsImage: { node: { sourceUrl: "" } }, projectsBgColor: "#FFFFFF", projectsLink: "/project-1", projectsTextColor: "#000000" },
-        { projectsHeadline: "Project 2", projectsSubText: "Description of project 2", projectsImage: { node: { sourceUrl: "" } }, projectsBgColor: "#FFFFFF", projectsLink: "/project-2", projectsTextColor: "#000000" },
-        { projectsHeadline: "Project 3", projectsSubText: "Description of project 3", projectsImage: { node: { sourceUrl: "" } }, projectsBgColor: "#FFFFFF", projectsLink: "/project-3", projectsTextColor: "#000000" },
-      ],
-      clientLogos: []
-    },
-  },
-  aboutPageSettings: {
-    aboutpageFields: {
-      aboutTag: "About Us",
-      aboutHeadline: "About Us",
-      aboutSubText: "We are a team of product designers, engineers, and strategists who love building digital products.",
-      aboutVideo: "",
-      boxAbout: [
-        { boxHeadline: "Box 1", boxSubText: "Description of box 1", boxImage: { node: { sourceUrl: "" } }, boxBgColor: "#FFFFFF", boxTextColor: "#000000" },
-        { boxHeadline: "Box 2", boxSubText: "Description of box 2", boxImage: { node: { sourceUrl: "" } }, boxBgColor: "#FFFFFF", boxTextColor: "#000000" },
-        { boxHeadline: "Box 3", boxSubText: "Description of box 3", boxImage: { node: { sourceUrl: "" } }, boxBgColor: "#FFFFFF", boxTextColor: "#000000" },
-      ],
-    },
-  },
-  headerSettings: {
-    headerFields: {
-      logo: null,
-      menu: [
-        {
-          label: "Services",
-          link: { url: "/services" },
-          submenu: [
-            { label: "Product strategy", link: { url: "/services" } },
-            { label: "Web & mobile", link: { url: "/services" } },
-          ],
-        },
-        {
-          label: "Blog",
-          link: { url: "/blog" },
-          submenu: [
-            { label: "Product insights", link: { url: "/blog" } },
-            { label: "Delivery stories", link: { url: "/blog" } },
-          ],
-        },
-        { label: "About", link: { url: "/about" } },
-      ],
-      labelButtonRight: "Let’s talk",
-      linkButtonRight: { url: "/contact" },
-    },
-  },
-};
+const SERVICES_QUERY = /* GraphQL */ `
+query {
+  allServices {
+    nodes {
+      slug
+      title
+      serviceFields {
+        summary
+        icon { node { sourceUrl altText } }
+      }
+    }
+  }
+}
+`;
 
-export async function getHomepageData(): Promise<HomepageData> {
+const SERVICE_BY_SLUG_QUERY = /* GraphQL */ `
+query ServiceBySlug($slug: ID!) {
+  service(id: $slug, idType: SLUG) {
+    slug
+    title
+    content
+    featuredImage {
+      node {
+        sourceUrl
+        altText
+        mediaDetails {
+          width
+          height
+        }
+      }
+    }
+    serviceFields {
+      summary
+      icon { node { sourceUrl altText } }
+      projects { projectsHeadline projectsSubText projectsImage { node { sourceUrl } } projectsBgColor, projectsLink, projectsTextColor }
+    }
+  }
+}
+`;
+
+const CONTACT_PAGE_QUERY = /* GraphQL */ `
+query ContactPage {
+  contactPageSettings {
+    contactPageFields {
+      contactHeadline
+      contactSubText
+
+      contactInformation {
+        icon { node { sourceUrl } }
+        text
+        link
+      }
+
+      contactMap
+    }
+  }
+}
+`;  
+
+export async function getHomepageData(): Promise<any> {
   if (!WP_GRAPHQL_URL) {
-    return FALLBACK_DATA;
+    return null;
   }
 
   try {
@@ -414,19 +349,57 @@ export async function getHomepageData(): Promise<HomepageData> {
     });
 
     if (!res.ok) {
-      return FALLBACK_DATA;
+      return null;
     }
 
     const json = await res.json();
 
     if (json.errors) {
       console.error(json.errors);
-      return FALLBACK_DATA;
+      return null;
     }
 
     return json.data as HomepageData;
   } catch {
-    return FALLBACK_DATA;
+    return null;
+  }
+}
+
+export async function getContactPageData(): Promise<ContactPageSettings | null> {
+  if (!WP_GRAPHQL_URL) {
+    return null;
+  }
+
+  try {
+    const res = await fetch(WP_GRAPHQL_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: CONTACT_PAGE_QUERY,
+      }),
+      next: {
+        revalidate: 3600,
+      },
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const json = await res.json();
+
+    if (
+      json.errors ||
+      !json.data?.contactPageSettings
+    ) {
+      return null;
+    }
+
+    return json.data.contactPageSettings as ContactPageSettings;
+  } catch {
+    return null;
   }
 }
 
@@ -522,5 +495,67 @@ export async function getBlogPosts(): Promise<WpPost[]> {
     return json.data.posts.nodes as WpPost[];
   } catch {
     return [];
+  }
+}
+
+export async function getServices(): Promise<Services[]> {
+  if (!WP_GRAPHQL_URL) {
+    return [];
+  }
+
+  try {
+    const res = await fetch(WP_GRAPHQL_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: SERVICES_QUERY }),
+      next: { revalidate: 3600 },
+    });
+
+    if (!res.ok) {
+      return [];
+    }
+
+    const json = await res.json();
+
+    console.log(json);
+    
+
+    if (json.errors || !json.data?.allServices?.nodes) {
+      return [];
+    }
+
+    return json.data.allServices.nodes as Services[];
+    
+  } catch {
+    return [];
+  }
+}
+
+export async function getServiceBySlug(slug: string): Promise<Service | null> {
+  if (!WP_GRAPHQL_URL) {
+    return null;
+  }
+
+  try {
+    const res = await fetch(WP_GRAPHQL_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: SERVICE_BY_SLUG_QUERY, variables: { slug } }),
+      next: { revalidate: 3600 },
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const json = await res.json();
+
+    if (json.errors || !json.data?.service) {
+      return null;
+    }
+
+    return json.data.service as Service;
+  } catch {
+    return null;
   }
 }

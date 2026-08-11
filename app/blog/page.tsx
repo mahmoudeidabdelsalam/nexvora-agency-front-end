@@ -9,6 +9,7 @@ export default async function BlogPage() {
   const data = await getHomepageData();
   const posts = await getBlogPosts();
   const { headerFields } = data.headerSettings;
+  const {homepageFields} = data.homepageSettings;
 
   return (
     <>
@@ -24,9 +25,15 @@ export default async function BlogPage() {
           <h1 className="mt-4 text-xl font-semibold text-[#262263] sm:text-5xl">Insights and product stories</h1>
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {posts.map((post) => (
-              <article key={post.slug} className="rounded-md border border-[#262263]/10 bg-[#f7fbfc] p-7 shadow-sm">
+              <article key={post.slug} className="rounded-md border border-[#262263]/10 bg-[#f7fbfc] p-2 shadow-sm">
+                <img className="h-120 w-full object-cover mb-5" src={post?.featuredImage?.node?.sourceUrl } alt={post.title} />
                 <h2 className="text-xl font-semibold text-[#262263]">{post.title}</h2>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{post.excerpt || "Read more about modern product delivery and digital growth."}</p>
+                <div
+                  className="mt-3 text-sm leading-7 text-slate-600"
+                  dangerouslySetInnerHTML={{
+                   __html: post.excerpt || "",
+                  }}
+                />
                 <Link href={post.uri || `/blog/${post.slug}`} className="mt-5 inline-flex text-sm font-semibold text-[#0997AA]">
                   Read article →
                 </Link>
@@ -38,7 +45,10 @@ export default async function BlogPage() {
           </div>
         </div>
       </main>
-      <Footer />
+      <Footer            
+          ctaLabel={"Let’s talk"}
+          ctaLink={"/contact-us"}
+          bgimageurl={homepageFields.bgimageurl?.node.sourceUrl}/>
     </>
   );
 }

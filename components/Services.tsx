@@ -1,6 +1,6 @@
-import type { Service } from "@/lib/wordpress";
+import type { Services } from "@/lib/wordpress";
 
-export default function Services({ services }: { services: Service[] }) {
+export default function Services({ services }: { services: Services[] }) {
   return (
     <section id="services" className="bg-[#f7fbfc] px-6 py-24 lg:px-8">
       <div className="mx-auto max-w-7xl">
