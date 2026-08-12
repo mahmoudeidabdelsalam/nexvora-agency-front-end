@@ -1,53 +1,44 @@
 import Link from "next/link";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { getHomepageData, getBlogPosts } from "@/lib/wordpress";
-import Hero from "@/components/Hero";
+import Footer from "@/components/layout/Footer";
+import { getBlogPostBySlug, getSiteSettings } from "@/lib/wordpress";
+import Hero from "@/components/shared/Hero";
 
 export const revalidate = 3600;
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const posts = await getBlogPosts();
-  const post = posts.find((item) => item.slug === resolvedParams.slug);
-  const data = await getHomepageData();
-  const { headerFields } = data.headerSettings;
-  const { homepageFields } = data.homepageSettings;
+  const post = await getBlogPostBySlug(resolvedParams.slug);
+  const siteSettings = await getSiteSettings();
+  const homepageFields = siteSettings?.homepageSettings.homepageFields;
 
   return (
     <>
-      <Header
-        logoUrl={headerFields.logo?.node.sourceUrl ?? "/logo.webp"}
-        menu={headerFields.menu}
-        ctaLabel={headerFields.labelButtonRight || "Let’s talk"}
-        ctaHref={headerFields.linkButtonRight?.url || "/contact"}
-      />
-      <main className="bg-wihte">
+      <main className="bg-white">
         <Hero
-          eyebrow={"BLOG"}
-          heading={post?.title || ""}
-          subtext={""}
-          video={""}
-          ctaLabel={""}
-          ctaLink={""}
+          eyebrow="BLOG"
+          heading={post?.title ?? ""}
+          subtext=""
+          video=""
+          ctaLabel=""
+          ctaLink=""
           bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
-          globallyHeadline={""}
-          globallySubtext={""}
-          globallyImage={""}
-          contactMap={""}
+          globallyHeadline=""
+          globallySubtext=""
+          globallyImage=""
+          contactMap=""
           imageFeatured={post?.featuredImage?.node?.sourceUrl ?? ""}
         />
         <div className="mx-auto max-w-4xl">
-          <div className="mt-8 prose max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: post?.content || "<p>This page is rendered from WordPress content.</p>" }} />
+          <div className="mt-8 prose max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: post?.content ?? "<p>This page is rendered from WordPress content.</p>" }} />
           <div className="mt-10">
             <Link href="/blog" className="text-sm font-semibold text-[#0997AA]">← Back to blog</Link>
           </div>
         </div>
       </main>
-      <Footer 
-        bgimageurl={homepageFields.bgimageurl?.node.sourceUrl} 
-        ctaLabel={"Let’s talk"}
-        ctaLink={"/contact-us"}
+      <Footer
+        bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
+        ctaLabel="Let’s talk"
+        ctaLink="/contact-us"
       />
     </>
   );

@@ -1,12 +1,12 @@
-import ScrollReveal from "./ScrollReveal";
+import ScrollReveal from "../shared/ScrollReveal";
 
 type core = { icon: { node: { sourceUrl: string } }; valuee: string; text?: string }; 
 
 export default function CoreValues({ coreValues, heading, subheading, image }: { coreValues: core[]; heading: string; subheading: string; image: { node: { sourceUrl: string } } }) {
   return (
     <section className="bg-white/10 px-6 lg:px-8 mt-6 relative">
-      <div className="mx-auto max-w-7xl flex flex-col lg:flex-row gap-16">
-        <div className="sticky top-30 h-fit lg:w-2/3">
+      <div className="mx-auto max-w-7xl flex flex-col lg:flex-row gap-4 lg:gap-16">
+        <div className="relative lg:sticky md:sticky top-0 lg:top-30 h-fit lg:w-2/3">
           <ScrollReveal animation="fadeInLeft">
             <h2 className="max-w-3xl text-xl font-semibold leading-[1.05] text-[#262263] sm:text-2xl lg:text-3xl flex flex-row gap-4 items-center">
               <svg width="30px" height="30px" viewBox="0 0 270 236" version="1.1">
@@ -37,7 +37,7 @@ export default function CoreValues({ coreValues, heading, subheading, image }: {
             </div>
           )}
         </div>
-        <div className="flex flex-col items-start justify-center gap-8 text-left pt-30 last:mb-0 lg:w-1/3">
+        <div className="flex flex-col items-start justify-center gap-4 lg:gap-8 text-left pt-0 lg:pt-30 last:mb-0 lg:w-1/3">
           {coreValues.map((item, index) => (
             <ScrollReveal key={item.valuee} animation="fadeInLeft" delay={index * 120}>
               <div 

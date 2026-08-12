@@ -1,49 +1,39 @@
 import Link from "next/link";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import ContactForm from "@/components/GravityForm";
-import Hero from "@/components/Hero";
-import { getHomepageData, getContactPageData } from "@/lib/wordpress";
+import Footer from "@/components/layout/Footer";
+import ContactForm from "@/components/contact/GravityForm";
+import Hero from "@/components/shared/Hero";
+import { getContactPageData } from "@/lib/wordpress";
 
 export default async function ContactPage() {
   const contactPageData = await getContactPageData();
-  const fields = contactPageData?.contactPageFields;
+  const fields = contactPageData?.contactPageSettings.contactPageFields;
+  const homepageFields = contactPageData?.homepageSettings.homepageFields;
 
-  const {contactHeadline, contactSubText, contactInformation = [], contactMap} = fields || {};
-  const data = await getHomepageData();
-  const { homepageFields } = data.homepageSettings;
-  const { headerFields } = data.headerSettings;
+  const { contactHeadline, contactSubText, contactInformation = [], contactMap } = fields ?? {};
 
   return (
     <>
-      <Header
-        logoUrl={headerFields.logo?.node.sourceUrl ?? "/logo.webp"}
-        menu={headerFields.menu}
-        ctaLabel={headerFields.labelButtonRight || "Let’s talk"}
-        ctaHref={headerFields.linkButtonRight?.url || "/contact"}
-      />
-      
       <main className="bg-white">
         <Hero
-          eyebrow={"CONTATC"}
-          heading={contactHeadline || ""}
-          subtext={contactSubText || ""}
-          video={""}
-          ctaLabel={""}
-          ctaLink={""}
-          bgimageurl={homepageFields.bgimageurl?.node.sourceUrl}
-          globallyHeadline={""}
-          globallySubtext={""}
-          globallyImage={""}
-          contactMap={contactMap || ""}
+          eyebrow="CONTACT"
+          heading={contactHeadline ?? ""}
+          subtext={contactSubText ?? ""}
+          video=""
+          ctaLabel=""
+          ctaLink=""
+          bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
+          globallyHeadline=""
+          globallySubtext=""
+          globallyImage=""
+          contactMap={contactMap ?? ""}
         />
-        <div className="mx-auto mt-16 justify-center items-center max-w-7xl sm:mt-20 lg:mt-24 grid gap-8 grid-cols-1 lg:grid-cols-2 lg:gap-16 stats-section">
+        <div className="mx-auto mt-16 justify-center items-center max-w-7xl sm:mt-20 lg:mt-24 grid gap-4 lg:gap-8 grid-cols-1 lg:grid-cols-2 lg:gap-4 lg:gap-16 stats-section">
           <dl className="grid grid-cols-1 gap-x-8 gap-y-4">
             {contactInformation.map((info, index) => (
               <div key={index} className="relative">
                 <dt className="flex gap-4 items-center font-semibold text-gray-900">
                   {info.icon?.node?.sourceUrl && (
-                    <img src={info.icon?.node?.sourceUrl} alt="" className="p-4 h-20 w-20 bg-[#0b97ab] text-gray-600 rounded-md" />
+                    <img src={info.icon.node.sourceUrl} alt="" className="p-4 h-20 w-20 bg-[#0b97ab] text-gray-600 rounded-md" />
                   )}
 
                   {info.link ? (
@@ -51,7 +41,7 @@ export default async function ContactPage() {
                       {info.text}
                     </Link>
                   ) : (
-                   <span className="text-[#262263] hover:text-[#0b97ab] text-xl">{info.text}</span>
+                    <span className="text-[#262263] hover:text-[#0b97ab] text-xl">{info.text}</span>
                   )}
                 </dt>
               </div>
@@ -69,7 +59,11 @@ export default async function ContactPage() {
           </div>
         </div>
       </main>
-      <Footer bgimageurl={homepageFields.bgimageurl?.node.sourceUrl} ctaLabel={homepageFields.heroCtaLabel} ctaLink={homepageFields.heroCtaLink} />
+      <Footer
+        bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
+        ctaLabel={homepageFields?.heroCtaLabel ?? ""}
+        ctaLink={homepageFields?.heroCtaLink ?? ""}
+      />
     </>
   );
 }

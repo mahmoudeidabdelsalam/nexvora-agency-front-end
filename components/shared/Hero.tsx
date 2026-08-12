@@ -38,7 +38,7 @@ export default function Hero({
         />
       )}
       <div className="relative mx-auto flex flex-col max-w-7xl">
-        <div className="pb-14">
+        <div className="pb-4 lg:pb-14">
           <ScrollReveal animation="fadeInLeft">
             <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">
               {eyebrow}
@@ -68,8 +68,9 @@ export default function Hero({
           )}
         </div>
 
+          
         {(globallyHeadline || globallySubtext || globallyImage) && (
-          <div className="max-w-full lg:max-w-6xl mx-auto border p-6 rounded-md shadow border-[#c4c4c7] bg-white grid gap-4 lg:grid-cols-2 lg:gap-6 items-center justify-center globally">
+          <div className="max-w-full lg:max-w-6xl mx-auto border p-6 rounded-md shadow border-[#c4c4c7] bg-white grid gap-4 lg:grid-cols-2 lg:gap-4 items-center justify-center globally">
             <div className="flex-1/2">
               {globallyHeadline && (
                 <ScrollReveal animation="fadeInLeft" delay={80}>

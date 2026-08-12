@@ -1,11 +1,11 @@
-import ScrollReveal from "./ScrollReveal";
+import ScrollReveal from "../shared/ScrollReveal";
 
 type project = { projectsHeadline: string; projectsSubText: string; projectsImage: { node: { sourceUrl: string } }; projectsBgColor: string, projectsLink: string, projectsTextColor: string };
 
 export default function Projects({ projects, widthCol }: { projects: project[]; widthCol: string; }) {
   return (
     <section className="bg-white/10 px-6 lg:px-8 pb-10 relative">
-      <div className={`mx-auto grid max-w-7xl relative z-2 grid-cols-1 lg:grid-cols-${widthCol} gap-6`}>
+      <div className={`mx-auto grid max-w-7xl relative z-2 grid-cols-1 lg:grid-cols-${widthCol} gap-4`}>
         {projects.map((item, index) => (
           <ScrollReveal key={index} animation="fadeInUp" delay={index * 120}>
             <div 

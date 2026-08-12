@@ -1,4 +1,4 @@
-import ScrollReveal from "./ScrollReveal";
+import ScrollReveal from "../shared/ScrollReveal";
 
 type ClientLogo = { name: string; logo: { node: { sourceUrl: string } } };
 
@@ -23,7 +23,6 @@ export function ClientLogos({ logos }: { logos: ClientLogo[] }) {
       <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-4 items-center justify-center gap-x-10 gap-y-8 relative z-2">
         {logos.map((client, index) => (
           <ScrollReveal key={client.name} animation="fadeInUp" delay={index * 80}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <div className="flex h-32 flex-3/12 items-center justify-center bg-white rounded-md border border-white/10 px-4 py-2 backdrop-blur transition-transform hover:-translate-y-0.5">
               <img
                 src={client.logo.node.sourceUrl}

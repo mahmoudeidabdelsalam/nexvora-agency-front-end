@@ -29,9 +29,9 @@ export default function Counters({ counters, heading, subheading }: { counters: 
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-white/10 px-6 py-16 lg:px-8 relative counters-section">
-      <div className={`mt-12 mx-auto max-w-7xl grid grid-cols-1 gap-6 md:grid-cols-6 xl:grid-cols-12 ${isVisible ? "" : "opacity-0"}`}>
-        <h2 className={`xl:col-span-12 md:col-span-6 text-xl font-semibold leading-[1.05] text-[#262263] sm:text-2xl lg:text-3xl flex flex-row gap-4 items-center ${isVisible ? "animated fadeInLeft" : "opacity-0"}`}>
+    <section ref={sectionRef} className="bg-white/10 px-4 py-4 lg:py-16 lg:px-8 relative counters-section">
+      <div className="mt-4 mb-4 lg:mt-12 mx-auto max-w-7xl relative z-2">
+        <h2 className={`text-xl font-semibold leading-[1.05] text-[#262263] sm:text-2xl lg:text-3xl flex flex-row gap-4 items-center ${isVisible ? "animated fadeInLeft" : "opacity-0"}`}>
           <svg width="30px" height="30px" viewBox="0 0 270 236" version="1.1">
               <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                   <g id="NEXVORA-" transform="translate(-1917, -683)" fill="#0997AA" fillRule="nonzero">
@@ -41,6 +41,8 @@ export default function Counters({ counters, heading, subheading }: { counters: 
           </svg>
           <span className="flex flex-col"><span>{heading}</span> <span className="font-normal capitalize text-[#0997AA]">{subheading}</span></span>
         </h2>
+      </div>
+      <div className={`mx-auto max-w-7xl grid grid-cols-2 gap-4 md:grid-cols-6 xl:grid-cols-12 ${isVisible ? "" : "opacity-0"}`}>
         {counters.map((item, index) => (
           <div
             key={item.valuee}

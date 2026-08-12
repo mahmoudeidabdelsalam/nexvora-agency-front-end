@@ -1,29 +1,21 @@
 import Link from "next/link";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { getHomepageData, getBlogPosts } from "@/lib/wordpress";
+import Footer from "@/components/layout/Footer";
+import { getBlogPosts, getSiteSettings } from "@/lib/wordpress";
 
 export const revalidate = 3600;
 
 export default async function BlogPage() {
-  const data = await getHomepageData();
   const posts = await getBlogPosts();
-  const { headerFields } = data.headerSettings;
-  const {homepageFields} = data.homepageSettings;
+  const siteSettings = await getSiteSettings();
+  const homepageFields = siteSettings?.homepageSettings.homepageFields;
 
   return (
     <>
-      <Header
-        logoUrl={headerFields.logo?.node.sourceUrl ?? "/logo.webp"}
-        menu={headerFields.menu}
-        ctaLabel={headerFields.labelButtonRight || "Let’s talk"}
-        ctaHref={headerFields.linkButtonRight?.url || "/contact"}
-      />
-      <main className="bg-white px-6 py-24 lg:px-8">
+      <main className="bg-white px-4 py-4 lg:py-24 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">Blog</p>
           <h1 className="mt-4 text-xl font-semibold text-[#262263] sm:text-5xl">Insights and product stories</h1>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
             {posts.map((post) => (
               <article key={post.slug} className="rounded-md border border-[#262263]/10 bg-[#f7fbfc] p-2 shadow-sm">
                 <img className="h-120 w-full object-cover mb-5" src={post?.featuredImage?.node?.sourceUrl } alt={post.title} />
@@ -45,10 +37,11 @@ export default async function BlogPage() {
           </div>
         </div>
       </main>
-      <Footer            
-          ctaLabel={"Let’s talk"}
-          ctaLink={"/contact-us"}
-          bgimageurl={homepageFields.bgimageurl?.node.sourceUrl}/>
+      <Footer
+        ctaLabel="Let’s talk"
+        ctaLink="/contact-us"
+        bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
+      />
     </>
   );
 }

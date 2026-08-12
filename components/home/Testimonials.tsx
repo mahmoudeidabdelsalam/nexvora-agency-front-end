@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Testimonial } from "@/lib/wordpress";
-import ScrollReveal from "./ScrollReveal";
+import ScrollReveal from "../shared/ScrollReveal";
 
 export default function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
   const [index, setIndex] = useState(0);

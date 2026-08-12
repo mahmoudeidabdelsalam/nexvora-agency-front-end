@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
 type HeaderMenuItem = {
@@ -39,9 +40,9 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
   return (
     <header ref={headerRef} className="sticky top-0 z-50 border-b border-[#0997AA]/10 bg-white backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-2 py-4 lg:px-0">
-        <a href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-4 lg:gap-3">
           <img src={logoUrl} alt="Agency logo" className="h-14 w-auto" />
-        </a>
+        </Link>
 
         <div className="flex items-center gap-4">
           <button
@@ -54,7 +55,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
                 <path d="M 2 9 L 2 11 L 48 11 L 48 9 L 2 9 z M 2 24 L 2 26 L 48 26 L 48 24 L 2 24 z M 2 39 L 2 41 L 48 41 L 48 39 L 2 39 z"></path>
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 50 50">
+              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 50 50">
                 <path d="M 7.7070312 6.2929688 L 6.2929688 7.7070312 L 23.585938 25 L 6.2929688 42.292969 L 7.7070312 43.707031 L 25 26.414062 L 42.292969 43.707031 L 43.707031 42.292969 L 26.414062 25 L 43.707031 7.7070312 L 42.292969 6.2929688 L 25 23.585938 L 7.7070312 6.2929688 z"></path>
               </svg>
             )}

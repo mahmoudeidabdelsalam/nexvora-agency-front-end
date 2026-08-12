@@ -1,7 +1,6 @@
 import Link from "next/link";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { getHomepageData, getPageBySlug } from "@/lib/wordpress";
+import Footer from "@/components/layout/Footer";
+import { getPageBySlug, getSiteSettings } from "@/lib/wordpress";
 
 export const revalidate = 3600;
 
@@ -13,20 +12,13 @@ export default async function CatchAllPage({
   const resolvedParams = await params;
   const slug = resolvedParams.slug?.join("/") ?? "";
   const normalizedSlug = slug ? `/${slug}` : "/";
-  const data = await getHomepageData();
-  const { homepageFields } = data.homepageSettings;
   const page = await getPageBySlug(normalizedSlug);
-  const { headerFields } = data.headerSettings;
+  const siteSettings = await getSiteSettings();
+  const homepageFields = siteSettings?.homepageSettings.homepageFields;
 
   return (
     <>
-      <Header
-        logoUrl={headerFields.logo?.node.sourceUrl ?? "/logo.webp"}
-        menu={headerFields.menu}
-        ctaLabel={headerFields.labelButtonRight || "Let’s talk"}
-        ctaHref={headerFields.linkButtonRight?.url || "/contact"}
-      />
-      <main className="bg-[#f7fbfc] px-6 py-24 lg:px-8">
+      <main className="bg-[#f7fbfc] px-4 py-4 lg:py-24 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">Page</p>
           <h1 className="mt-4 text-xl font-semibold text-[#262263] sm:text-5xl">
@@ -38,7 +30,11 @@ export default async function CatchAllPage({
           </div>
         </div>
       </main>
-      <Footer bgimageurl={homepageFields.bgimageurl?.node.sourceUrl} ctaLabel={homepageFields.heroCtaLabel} ctaLink={homepageFields.heroCtaLink} />
+      <Footer
+        bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
+        ctaLabel={homepageFields?.heroCtaLabel ?? ""}
+        ctaLink={homepageFields?.heroCtaLink ?? ""}
+      />
     </>
   );
 }

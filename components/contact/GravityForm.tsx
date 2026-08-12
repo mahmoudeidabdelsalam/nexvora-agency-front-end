@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 interface ContactFormProps {
   formId: string;
@@ -14,7 +14,7 @@ export default function ContactForm({
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (event: { target: { name: any; value: any; }; }) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {
       name,
       value,
@@ -26,7 +26,7 @@ export default function ContactForm({
     }));
   };
 
-  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setLoading(true);

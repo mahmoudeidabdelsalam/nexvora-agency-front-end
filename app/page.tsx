@@ -1,14 +1,13 @@
 import { getHomepageData, getServices } from "@/lib/wordpress";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import Stats from "@/components/Stats";
-import Team from "@/components/Team";
-import Counters from "@/components/Counters";
-import Testimonials from "@/components/Testimonials";
-import { ClientLogos } from "@/components/ClientLogosAndCta";
-import Footer from "@/components/Footer";
-import CoreValues from "@/components/CoreValues";
-import Projects from "@/components/Projects";
+import Hero from "@/components/shared/Hero";
+import Stats from "@/components/home/Stats";
+import Team from "@/components/home/Team";
+import Counters from "@/components/home/Counters";
+import Testimonials from "@/components/home/Testimonials";
+import { ClientLogos } from "@/components/home/ClientLogos";
+import Footer from "@/components/layout/Footer";
+import CoreValues from "@/components/home/CoreValues";
+import Projects from "@/components/home/Projects";
 
 // Revalidate hourly by default; on-demand revalidation via /api/revalidate
 // (wired to a WordPress publish webhook) overrides this for fast updates.
@@ -17,16 +16,34 @@ export const revalidate = 3600;
 export default async function HomePage() {
   const data = await getHomepageData();
   const services = await getServices();
-  const { homepageFields } = data.homepageSettings;
-  const { headerFields } = data.headerSettings;
+  const homepageFields = data?.homepageSettings?.homepageFields ?? {
+    heroEyebrow: "",
+    heroHeading: "",
+    heroSubtext: "",
+    heroCtaLabel: "",
+    heroCtaLink: "",
+    bgimageurl: undefined,
+    globallyHeadline: "",
+    globallySubtext: "",
+    globallyImage: undefined,
+    expertiseHeadline: "",
+    expertiseSubText: "",
+    solutions: [],
+    teamHeadline: "",
+    teamSubText: "",
+    coreHeadline: "",
+    coreSubText: "",
+    coreImageLeft: undefined,
+    coreValues: [],
+    countersHeadline: "",
+    countersSubText: "",
+    counters: [],
+    projects: [],
+    clientLogos: [],
+  };
+  const testimonials = data?.allTestimonials?.nodes ?? [];
   return (
     <>
-      <Header
-        logoUrl={headerFields.logo?.node.sourceUrl ?? "/logo.webp"}
-        menu={headerFields.menu}
-        ctaLabel={headerFields.labelButtonRight || "Let’s talk"}
-        ctaHref={headerFields.linkButtonRight?.url || "/contact"}
-      />
       <main>
         <Hero
           eyebrow={homepageFields.heroEyebrow}
@@ -45,7 +62,7 @@ export default async function HomePage() {
         <Counters counters={homepageFields.counters} heading={homepageFields.countersHeadline ?? ""} subheading={homepageFields.countersSubText ?? ""} />
         <Projects projects={homepageFields.projects} widthCol="2" />
         <ClientLogos logos={homepageFields.clientLogos} />
-        <Testimonials testimonials={data.allTestimonials.nodes} />
+        <Testimonials testimonials={testimonials} />
       </main>
       <Footer bgimageurl={homepageFields.bgimageurl?.node.sourceUrl} ctaLabel={homepageFields.heroCtaLabel} ctaLink={homepageFields.heroCtaLink} />
     </>
