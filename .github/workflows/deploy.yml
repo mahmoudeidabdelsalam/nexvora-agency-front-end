@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -30,6 +30,13 @@ jobs:
           WORDPRESS_GRAPHQL_URL: ${{ vars.WORDPRESS_GRAPHQL_URL }}
           WORDPRESS_MEDIA_HOSTNAME: ${{ vars.WORDPRESS_MEDIA_HOSTNAME }}
           NEXT_PUBLIC_WORDPRESS_URL: ${{ vars.NEXT_PUBLIC_WORDPRESS_URL }}
+
+      - name: Verify static export
+        run: |
+          test -f out/index.html
+          test -f out/service/index.html
+          test -f out/blog/index.html
+          echo "Static export verified successfully."
 
       - name: Deploy to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
