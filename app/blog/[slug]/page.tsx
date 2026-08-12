@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
-import { getBlogPostBySlug, getSiteSettings } from "@/lib/wordpress";
+import { getBlogPostBySlug, getBlogPosts, getSiteSettings } from "@/lib/wordpress";
 import Hero from "@/components/shared/Hero";
 
 export async function generateStaticParams() {

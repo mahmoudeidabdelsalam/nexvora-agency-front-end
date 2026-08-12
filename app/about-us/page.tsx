@@ -5,7 +5,6 @@ import { ClientLogos } from "@/components/home/ClientLogos";
 import Footer from "@/components/layout/Footer";
 import BoxAbout from "@/components/about/BoxAbout";
 
-export const revalidate = 3600;
 
 export default async function AboutPage() {
   const data = await getAboutPageData();

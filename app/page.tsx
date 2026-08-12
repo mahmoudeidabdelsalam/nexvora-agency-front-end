@@ -9,9 +9,6 @@ import Footer from "@/components/layout/Footer";
 import CoreValues from "@/components/home/CoreValues";
 import Projects from "@/components/home/Projects";
 
-// Revalidate hourly by default; on-demand revalidation via /api/revalidate
-// (wired to a WordPress publish webhook) overrides this for fast updates.
-export const revalidate = 3600;
 
 export default async function HomePage() {
   const data = await getHomepageData();

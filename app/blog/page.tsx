@@ -2,7 +2,6 @@ import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import { getBlogPosts, getSiteSettings } from "@/lib/wordpress";
 
-export const revalidate = 3600;
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();

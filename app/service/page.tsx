@@ -3,7 +3,6 @@ import Footer from "@/components/layout/Footer";
 import { getPagesBySlug, getServices } from "@/lib/wordpress";
 import Services from "@/components/service/Services";
 
-export const revalidate = 3600;
 
 export default async function ServicesPage() {
   const pages = await getPagesBySlug(["services"]);

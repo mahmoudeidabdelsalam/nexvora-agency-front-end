@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
-import { getServiceBySlug, getSiteSettings } from "@/lib/wordpress";
+import { getServiceBySlug, getServices, getSiteSettings } from "@/lib/wordpress";
 import Hero from "@/components/shared/Hero";
 import Projects from "@/components/home/Projects";
 
