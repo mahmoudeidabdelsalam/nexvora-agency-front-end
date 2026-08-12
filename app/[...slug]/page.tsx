@@ -2,7 +2,19 @@ import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import { getPageBySlug, getSiteSettings } from "@/lib/wordpress";
 
-export const revalidate = 3600;
+import { getAllPages } from "@/lib/wordpress/services/pages";
+
+export async function generateStaticParams() {
+  // Fetch all page URIs from WordPress and convert them to the catch-all param form.
+  // WordPress URIs come with a leading slash ("/about"), convert to an array: ["about"].
+  const uris = await getAllPages();
+
+  return uris.map((uri) => {
+    const trimmed = uri.replace(/^\/+|\/+$/g, "");
+    const slugArr = trimmed === "" ? [] : trimmed.split("/");
+    return { slug: slugArr };
+  });
+}
 
 export default async function CatchAllPage({
   params,

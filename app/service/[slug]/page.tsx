@@ -4,7 +4,11 @@ import { getServiceBySlug, getSiteSettings } from "@/lib/wordpress";
 import Hero from "@/components/shared/Hero";
 import Projects from "@/components/home/Projects";
 
-export const revalidate = 3600;
+export async function generateStaticParams() {
+  // Generate params for every service to statically render service detail pages
+  const services = await getServices();
+  return services.map((s) => ({ slug: s.slug }));
+}
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;

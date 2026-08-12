@@ -19,3 +19,15 @@ query PagesBySlug($slugs: [String!]) {
   }
 }
 `;
+
+// Fetch list of all pages (uris). Used for static generation of catch-all pages.
+export const PAGES_LIST_QUERY = /* GraphQL */ `
+query PagesList($first: Int = 10000) {
+  pages(first: $first) {
+    nodes {
+      uri
+      slug
+    }
+  }
+}
+`;

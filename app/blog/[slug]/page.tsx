@@ -3,7 +3,11 @@ import Footer from "@/components/layout/Footer";
 import { getBlogPostBySlug, getSiteSettings } from "@/lib/wordpress";
 import Hero from "@/components/shared/Hero";
 
-export const revalidate = 3600;
+export async function generateStaticParams() {
+  // Generate params for every published blog post so static export includes them
+  const posts = await getBlogPosts();
+  return posts.map((p) => ({ slug: p.slug }));
+}
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;

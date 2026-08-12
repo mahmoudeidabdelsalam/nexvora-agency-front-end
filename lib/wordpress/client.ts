@@ -5,14 +5,18 @@ type GraphQLResponse<T> = {
   errors?: Array<{ message: string; [key: string]: unknown }>;
 };
 
+/**
+ * Fetch helper for WPGraphQL.
+ * This function throws on configuration, network or GraphQL errors so the
+ * build fails with informative messages instead of silently returning null.
+ */
 export async function wordpressFetch<T>(
   query: string,
   variables?: Record<string, unknown>,
   next?: RequestInit["next"]
-): Promise<T | null> {
+): Promise<T> {
   if (!WP_GRAPHQL_URL) {
-    console.error("WORDPRESS_GRAPHQL_URL is not configured.");
-    return null;
+    throw new Error("WORDPRESS_GRAPHQL_URL is not configured. Set WORDPRESS_GRAPHQL_URL in your environment.");
   }
 
   try {
@@ -26,22 +30,27 @@ export async function wordpressFetch<T>(
     });
 
     if (!res.ok) {
-      console.error(`GraphQL request failed with status ${res.status}`);
-      return null;
+      const bodyText = await res.text().catch(() => "<unable to read response body>");
+      throw new Error(`GraphQL request failed with status ${res.status}: ${bodyText}`);
     }
 
     const json = (await res.json()) as GraphQLResponse<T>;
 
-    console.log("GraphQL response:", json);
-
-    if (json.errors) {
-      console.error("GraphQL errors:", json.errors);
-      return null;
+    if (json.errors && json.errors.length > 0) {
+      // Provide the GraphQL errors verbatim for debugging
+      throw new Error(`GraphQL errors: ${JSON.stringify(json.errors)}`);
     }
 
-    return json.data ?? null;
+    if (!json.data) {
+      throw new Error("GraphQL response contained no data.");
+    }
+
+    return json.data;
   } catch (error) {
-    console.error("GraphQL fetch error:", error);
-    return null;
+    // Re-throw with clearer context for build-time failures (e.g. TLS errors)
+    if (error instanceof Error) {
+      throw new Error(`Failed to fetch from WP GraphQL (${WP_GRAPHQL_URL}): ${error.message}`);
+    }
+    throw error;
   }
 }
