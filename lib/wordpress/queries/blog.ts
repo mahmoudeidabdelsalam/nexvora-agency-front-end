@@ -1,6 +1,6 @@
 export const BLOG_POSTS_QUERY = /* GraphQL */ `
 query BlogPosts {
-  posts(first: 10) {
+  posts(first: 10000) {
     nodes {
       slug
       title
