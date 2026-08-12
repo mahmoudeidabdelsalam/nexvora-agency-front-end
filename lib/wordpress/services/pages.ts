@@ -13,9 +13,13 @@ export async function getPagesBySlug(slugs: string[]): Promise<WpPage[]> {
     return [];
   }
 
-  const data = await wordpressFetch<{ pages: { nodes: WpPage[] } }>(PAGES_BY_SLUG_QUERY, { slugs });
+  // Fetch a large page list and filter client-side because the installed
+  // WPGraphQL schema does not support `slugIn` on the pages(where: ...) arg.
+  const data = await wordpressFetch<{ pages: { nodes: WpPage[] } }>(PAGES_BY_SLUG_QUERY, { first: 10000 });
 
-  return data?.pages?.nodes ?? [];
+  const nodes = data?.pages?.nodes ?? [];
+  const lookup = new Set(slugs);
+  return nodes.filter((n) => lookup.has(n.slug));
 }
 
 /**

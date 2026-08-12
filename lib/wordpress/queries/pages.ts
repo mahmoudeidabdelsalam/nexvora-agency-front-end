@@ -9,12 +9,13 @@ query PageBySlug($slug: String!) {
 `;
 
 export const PAGES_BY_SLUG_QUERY = /* GraphQL */ `
-query PagesBySlug($slugs: [String!]) {
-  pages(where: { slugIn: $slugs }) {
+query PagesBySlug($first: Int = 10000) {
+  pages(first: $first) {
     nodes {
       slug
       title
       content
+      uri
     }
   }
 }
