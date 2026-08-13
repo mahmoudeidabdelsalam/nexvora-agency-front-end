@@ -28,6 +28,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Test WordPress GraphQL
+        run: |
+          echo "Testing WordPress GraphQL..."
+          curl -sS --max-time 30 \
+            -X POST \
+            -H "Content-Type: application/json" \
+            --data '{"query":"{ generalSettings { title } }"}' \
+            https://cms.nexvoraagency.com/graphql
+
       - name: Build Next.js static export
         run: npm run build
         env:
