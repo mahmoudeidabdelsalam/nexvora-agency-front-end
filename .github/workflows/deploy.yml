@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+  repository_dispatch:
+    types:
+      - wordpress_content_updated
+
   workflow_dispatch:
 
 jobs:
