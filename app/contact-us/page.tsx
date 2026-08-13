@@ -28,7 +28,7 @@ export default async function ContactPage() {
           contactMap={contactMap ?? ""}
         />
         <div className="mx-auto mt-16 justify-center items-center max-w-7xl sm:mt-20 lg:mt-24 grid gap-4 lg:gap-8 grid-cols-1 lg:grid-cols-2 lg:gap-4 lg:gap-16 stats-section">
-          <dl className="grid grid-cols-1 gap-x-8 gap-y-4">
+          <dl className="grid grid-cols-1 gap-x-8 gap-y-4 px-4 sm:px-6 lg:px-8 lg:pt-8">
             {contactInformation.map((info, index) => (
               <div key={index} className="relative">
                 <dt className="flex gap-4 items-center font-semibold text-gray-900">

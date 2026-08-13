@@ -25,7 +25,7 @@ export default async function BlogPage() {
                    __html: post.excerpt || "",
                   }}
                 />
-                <Link href={post.uri || `/blog/${post.slug}`} className="mt-5 inline-flex text-sm font-semibold text-[#0997AA]">
+                <Link href={`/blog/${post.slug}`} className="mt-5 inline-flex text-sm font-semibold text-[#0997AA]">
                   Read article →
                 </Link>
               </article>
