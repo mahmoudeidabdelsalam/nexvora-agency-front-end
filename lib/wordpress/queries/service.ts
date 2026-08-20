@@ -1,6 +1,14 @@
 export const SERVICES_QUERY = /* GraphQL */ `
 query Services {
-  allServices {
+  allServices (
+  first: 12
+    where: {
+      orderby: {
+        field: MENU_ORDER
+        order: ASC
+      }
+    }
+  ) {
     nodes {
       slug
       title

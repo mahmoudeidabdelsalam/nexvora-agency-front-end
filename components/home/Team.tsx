@@ -1,10 +1,10 @@
 import ScrollReveal from "../shared/ScrollReveal";
 
-type solution = { icon: { node: { sourceUrl: string } }; valuee: string }; 
+type solution = { icon: { node: { sourceUrl: string } }; valuee: string; text: string }; 
 
 export default function Team({ solutions, heading, subheading }: { solutions: solution[]; heading: string; subheading: string }) {
   return (
-    <section className="bg-white/10 px-6 py-10 lg:px-8 relative">
+    <section className="bg-white/10 px-6 py-10 lg:py-20 lg:px-8 relative">
      
       <div className="mx-auto grid max-w-7xl relative z-2 grid-cols-1 gap-0">
         <ScrollReveal animation="fadeInLeft">
@@ -30,10 +30,10 @@ export default function Team({ solutions, heading, subheading }: { solutions: so
         {solutions.map((item, index) => (
           <ScrollReveal key={item.valuee} animation="fadeInUp" delay={index * 120}>
             <div 
-              className="group flex flex-col lg:flex-row  lg:items-center lg:justify-center gap-2 text-left"
+              className="group flex flex-col lg:justify-center gap-2 text-left"
             >
             {item.icon.node.sourceUrl && (
-              <div className="rounded-md border flex items-center justify-center border-[#0b97ab]/10 bg-[#0b97ab] h-18 w-30 p-3 backdrop-blur opacity-80 transition-opacity group-hover:opacity-100">
+              <div className="rounded-md border flex items-center justify-center border-[#0b97ab]/10 bg-[#0b97ab] h-12 w-12 p-2 backdrop-blur opacity-80 transition-opacity group-hover:opacity-100">
                   <img
                       key={item.valuee}
                       src={item.icon.node.sourceUrl}
@@ -42,7 +42,8 @@ export default function Team({ solutions, heading, subheading }: { solutions: so
                   />
               </div>
             )}
-              <p className="m-0 font-bold text-md text-[#262263] group-hover:text-[#0997AA] transition-colors">{item.valuee}</p>
+              <h2 className="m-0 font-bold text-sm text-[#262263] group-hover:text-[#0997AA] transition-colors" dangerouslySetInnerHTML={{ __html: item.valuee }}></h2>
+              <p className="m-0 text-sm text-slate-600 group-hover:text-[#0997AA] transition-colors">{item.text}</p> 
             </div>
           </ScrollReveal>
         ))}

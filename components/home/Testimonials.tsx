@@ -11,7 +11,7 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
   if (!current) return null;
 
   return (
-    <section className="px-6 py-10 lg:px-8">
+    <section className="px-6 py-10 lg:py-20 lg:px-8">
       <div className="mx-auto max-w-5xl text-center">
         <ScrollReveal animation="fadeInLeft">
           <h2 className="max-w-3xl text-xl font-semibold leading-[1.05] text-[#262263] sm:text-2xl lg:text-3xl flex flex-row gap-4 items-center">

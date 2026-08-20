@@ -1,9 +1,20 @@
+import Link from "next/link";
 import ScrollReveal from "../shared/ScrollReveal";
+
+type FooterLink = {
+  label: string;
+  url: string;
+};
 
 const COLUMNS = [
   {
     title: "Company",
-    links: ["Home", "About us", "Blog", "Contact"],
+    links: [
+      { label: "Home", url: "/" },
+      { label: "About us", url: "/about-us" },
+      { label: "Blog", url: "/blog" },
+      { label: "Contact", url: "/contact-us" },
+    ] satisfies FooterLink[],
   },
   {
     title: "Technologies",
@@ -18,7 +29,7 @@ const COLUMNS = [
       "Software Testing",
     ],
   },
-];
+] as const;
 
 type FooterProps = {
   bgimageurl?: string;
@@ -71,9 +82,17 @@ export default function Footer({ bgimageurl, ctaLabel, ctaLink }: FooterProps) {
                 {col.title}
               </p>
               <ul className="mt-4 space-y-2 text-sm text-[#262263]">
-                {col.links.map((link) => (
-                  <li key={link}>{link}</li>
-                ))}
+                {col.links.map((link) => {
+                  const item = typeof link === "string" ? { label: link, url: "#" } : link;
+
+                  return (
+                    <li key={item.label}>
+                      <Link href={item.url} className="transition-colors hover:text-[#0997AA]">
+                        {item.label}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}

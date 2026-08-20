@@ -146,6 +146,11 @@ iframe {
     margin-bottom: -440px;
 }
 
+.projects-section .img-projects img {
+    width: 100%;
+    height: 300px;
+}
+
 @media screen and (max-width: 1024px) {
     .video-section + .counters-section {
         margin-top: 0;

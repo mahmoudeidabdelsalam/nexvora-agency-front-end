@@ -10,7 +10,7 @@ export type HomepageFields = {
   bgimageurl?: ImageNode;
   expertiseHeadline?: string;
   expertiseSubText?: string;
-  solutions: { icon: ImageNode; valuee: string }[];
+  solutions: { icon: ImageNode; valuee: string; text: string }[];
   teamHeadline?: string;
   teamSubText?: string;
   coreHeadline?: string;

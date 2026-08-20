@@ -4,7 +4,7 @@ import type { ServiceListItem } from "@/lib/wordpress";
 
 export default function Stats({ stats, heading, subheading }: { stats: ServiceListItem[]; heading: string; subheading: string }) {
   return (
-    <section className="border-y border-[#262263]/10 bg-[linear-gradient(135deg,#0997AA_0%,#262262_100%)] px-6 py-10 lg:px-8 relative stats-section">
+    <section className="border-y border-[#262263]/10 bg-[linear-gradient(135deg,#0997AA_0%,#262262_100%)] px-6 py-10 lg:py-20 lg:px-8 relative stats-section">
       <div className="pattern"></div>
       <div className="mx-auto grid max-w-7xl relative z-2 grid-cols-1 gap-0">
         <ScrollReveal animation="fadeInLeft">

@@ -21,7 +21,7 @@ query Homepage {
       bgimageurl { node { sourceUrl } }
       expertiseHeadline
       expertiseSubText
-      solutions { icon { node { sourceUrl } } valuee }
+      solutions { icon { node { sourceUrl } } valuee text }
       teamHeadline
       teamSubText
       coreHeadline

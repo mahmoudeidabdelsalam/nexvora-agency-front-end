@@ -42,11 +42,11 @@ export default function Counters({ counters, heading, subheading }: { counters: 
           <span className="flex flex-col"><span>{heading}</span> <span className="font-normal capitalize text-[#0997AA]">{subheading}</span></span>
         </h2>
       </div>
-      <div className={`mx-auto max-w-7xl grid grid-cols-2 gap-4 md:grid-cols-6 xl:grid-cols-12 ${isVisible ? "" : "opacity-0"}`}>
+      <div className={`mx-auto max-w-7xl grid grid-cols-2 gap-4 md:grid-cols-5 xl:grid-cols-5 ${isVisible ? "" : "opacity-0"}`}>
         {counters.map((item, index) => (
           <div
             key={item.valuee}
-            className={`group bg-[#0b97ab] hover:bg-[#262263] transition-colors md:col-span-2 xl:col-span-2 flex flex-col items-start justify-center gap-1 text-left p-4 rounded-md backdrop-blur opacity-80 hover:opacity-100 relative ${isVisible ? "animated fadeInUp" : "opacity-0"}`}
+            className={`group bg-[#0b97ab] hover:bg-[#262263] transition-colors flex flex-col items-start justify-center gap-1 text-left p-4 rounded-md backdrop-blur opacity-80 hover:opacity-100 relative ${isVisible ? "animated fadeInUp" : "opacity-0"}`}
             style={{ animationDelay: `${index * 120}ms` }}
           >
             <svg fill="none" viewBox="0 0 295 172" className="absolute inset-0 z-0 opacity-30 h-fit w-full object-contain">
