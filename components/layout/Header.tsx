@@ -38,7 +38,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
   }, [openMenu]);
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-50 border-b border-[#0997AA]/10 bg-white backdrop-blur-xl">
+    <header ref={headerRef} className="sticky top-0 z-50 bg-white backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-2 py-4 lg:px-0">
         <Link href="/" className="flex items-center gap-4 lg:gap-3">
           <img src={logoUrl} alt="Agency logo" className="h-14 w-auto" />
@@ -65,33 +65,33 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
             {navItems.map((item) => {
               const hasSubmenu = item.submenu?.length;
               return (
-                <div key={item.label} className="relative">
+                <div key={item.label} className="group relative">
                   <div className="flex items-center gap-1.5">
                     {!hasSubmenu && (
                       <a
                         href={item.link?.url || "/"}
-                        className="flex items-center gap-1.5 text-sm font-medium text-#262263 uppercase transition-colors hover:text-[#0997AA]"
+                        className="flex items-center gap-1.5 text-sm font-medium uppercase text-[#262263] transition-colors hover:text-[#0997AA]"
                         onClick={() => setOpenMenu(null)}
                       >
                         <span>{item.label}</span>
                       </a>
                     )}
-                    
+
                     {hasSubmenu ? (
-                      <button
-                        type="button"
-                        onClick={() => toggleMenu(item.label)}
-                        className="flex items-center gap-1.5 text-sm font-medium text-#262263 uppercase transition-colors hover:text-[#0997AA]"
-                        aria-expanded={openMenu === item.label}
-                        aria-label={`Toggle ${item.label} submenu`}
+                      <a
+                        href={item.link?.url || "/"}
+                        className="flex items-center gap-1.5 text-sm font-medium uppercase text-[#262263] transition-colors hover:text-[#0997AA]"
+                        onClick={() => setOpenMenu(null)}
+                        aria-label={item.label}
                       >
                         <span>{item.label}</span>
-                        <span className={`text-xs transition-transform icon-submenu ${openMenu === item.label ? "rotate-180" : ""}`}></span>
-                      </button>
+                        <span className="inline-block h-0 w-0 border-x-[5px] border-t-[6px] border-x-transparent border-t-[#0997AA] transition-transform duration-200 group-hover:rotate-180" aria-hidden="true" />
+                      </a>
                     ) : null}
                   </div>
-                  {hasSubmenu && openMenu === item.label && (
-                    <div className="absolute left-0 top-full mt-3 w-80 rounded-md border border-[#262263]/10 bg-white p-3 shadow-xl">
+
+                  {hasSubmenu && (
+                    <div className="invisible absolute left-0 top-full z-20 mt-3 w-80 -translate-y-1 rounded-md border border-[#262263]/10 bg-white p-3 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
                       {item.submenu?.map((subItem) => (
                         <a
                           key={subItem.label}

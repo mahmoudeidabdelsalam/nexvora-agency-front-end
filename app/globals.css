@@ -135,16 +135,6 @@ iframe {
     height: 100%;
 }
 
-.globally-section + .stats-section {
-   padding-top: 220px;
-   padding-bottom: 60px;
-}
-
-.globally-section.hero-section .globally {
-    margin-bottom: -160px;
-    z-index: 2;
-}
-
 .video-section + .counters-section {
     margin-top: 0;
     background: #ffffff;
@@ -157,16 +147,6 @@ iframe {
 }
 
 @media screen and (max-width: 1024px) {
-    .globally-section + .stats-section {
-        padding-top: 50px;
-        padding-bottom: 60px;
-    }
-
-    .globally-section.hero-section .globally {
-        margin-bottom: 40px;
-        z-index: 2;
-    }
-
     .video-section + .counters-section {
         margin-top: 0;
         background: #ffffff;

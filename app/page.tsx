@@ -49,9 +49,6 @@ export default async function HomePage() {
           ctaLabel={homepageFields.heroCtaLabel}
           ctaLink={homepageFields.heroCtaLink}
           bgimageurl={homepageFields.bgimageurl?.node.sourceUrl}
-          globallyHeadline={homepageFields.globallyHeadline}
-          globallySubtext={homepageFields.globallySubtext}
-          globallyImage={homepageFields.globallyImage?.node.sourceUrl}
         />
         <Stats stats={services} heading={homepageFields.expertiseHeadline ?? ""} subheading={homepageFields.expertiseSubText ?? ""} />
         <Team solutions={homepageFields.solutions} heading={homepageFields.teamHeadline ?? ""} subheading={homepageFields.teamSubText ?? ""} />
