@@ -22,9 +22,6 @@ export default async function AboutPage() {
           ctaLabel={homepageFields?.heroCtaLabel ?? ""}
           ctaLink={homepageFields?.heroCtaLink ?? ""}
           bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
-          globallyHeadline={""}
-          globallySubtext={""}
-          globallyImage={""}
         />
         <Counters counters={homepageFields?.counters ?? []} heading={homepageFields?.countersHeadline ?? ""} subheading={homepageFields?.countersSubText ?? ""} />
         <ClientLogos logos={homepageFields?.clientLogos ?? []} />

@@ -19,9 +19,6 @@ query Homepage {
       heroCtaLabel
       heroCtaLink
       bgimageurl { node { sourceUrl } }
-      globallyHeadline
-      globallySubtext
-      globallyImage { node { sourceUrl } }
       expertiseHeadline
       expertiseSubText
       solutions { icon { node { sourceUrl } } valuee }

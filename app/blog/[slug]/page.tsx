@@ -26,9 +26,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           ctaLabel=""
           ctaLink=""
           bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
-          globallyHeadline=""
-          globallySubtext=""
-          globallyImage=""
           contactMap=""
           imageFeatured={post?.featuredImage?.node?.sourceUrl ?? ""}
         />

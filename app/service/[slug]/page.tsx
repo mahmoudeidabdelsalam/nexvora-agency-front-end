@@ -27,9 +27,6 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           ctaLabel="Let’s talk"
           ctaLink="/contact-us"
           bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
-          globallyHeadline=""
-          globallySubtext=""
-          globallyImage=""
           contactMap=""
           imageFeatured={service?.featuredImage?.node?.sourceUrl ?? ""}
         />

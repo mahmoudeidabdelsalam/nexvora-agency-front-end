@@ -8,9 +8,6 @@ export type HomepageFields = {
   heroCtaLabel: string;
   heroCtaLink: string;
   bgimageurl?: ImageNode;
-  globallyHeadline?: string;
-  globallySubtext?: string;
-  globallyImage?: ImageNode;
   expertiseHeadline?: string;
   expertiseSubText?: string;
   solutions: { icon: ImageNode; valuee: string }[];

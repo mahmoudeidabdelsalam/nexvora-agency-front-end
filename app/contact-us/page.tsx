@@ -22,9 +22,6 @@ export default async function ContactPage() {
           ctaLabel=""
           ctaLink=""
           bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
-          globallyHeadline=""
-          globallySubtext=""
-          globallyImage=""
           contactMap={contactMap ?? ""}
         />
         <div className="mx-auto mt-16 justify-center items-center max-w-7xl sm:mt-20 lg:mt-24 grid gap-4 lg:gap-8 grid-cols-1 lg:grid-cols-2 lg:gap-4 lg:gap-16 stats-section">
