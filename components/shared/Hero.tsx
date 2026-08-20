@@ -20,6 +20,8 @@ export default function Hero({
   ctaLink,
   bgimageurl,
   video,
+  contactMap,
+  imageFeatured,
 }: HeroProps) {
   return (
     <section className={`relative px-6 pt-24 sm:pt-28 lg:px-8 ${video ? "video-section" : ""} hero-section`}>
@@ -73,6 +75,28 @@ export default function Hero({
           </ScrollReveal>
         )}
 
+        {contactMap && (
+           <ScrollReveal animation="fadeInUp" delay={120}>
+             <div className="mt-8 flex flex-col items-center justify-center gap-4 text-center globally">
+                <div
+                  className="w-full max-w-7xl h-120 rounded-md overflow-hidden shadow-lg shadow-[#262263]/10 m-auto"
+                  dangerouslySetInnerHTML={{
+                    __html: contactMap || "",
+                  }}
+                />
+              </div>
+          </ScrollReveal>
+        )}
+
+        {imageFeatured && (
+           <ScrollReveal animation="fadeInUp" delay={120}>
+             <div className="flex flex-col items-center justify-center gap-4 text-center globally pb-5">
+                <div className="w-full max-w-7xl h-180 bg-white rounded-md overflow-hidden shadow-lg shadow-[#262263]/10 m-auto p-2 lg:p-3">
+                  <img className="w-full h-full object-cover object-top" src={imageFeatured} alt={heading} />
+                </div>
+              </div>
+          </ScrollReveal>
+        )}
       </div>
     </section>
   );
