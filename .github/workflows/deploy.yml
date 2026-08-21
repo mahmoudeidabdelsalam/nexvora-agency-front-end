@@ -63,7 +63,11 @@ jobs:
           local-dir: ./out/
           server-dir: ./
 
+          state-name: .ftp-deploy-sync-state-v2.json
+
           dangerous-clean-slate: false
 
           exclude: |
             **/.DS_Store
+            **/.git*
+            **/.git*/**
