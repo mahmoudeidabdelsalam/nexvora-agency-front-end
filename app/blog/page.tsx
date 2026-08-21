@@ -12,8 +12,8 @@ export default async function BlogPage() {
     <>
       <main className="bg-white px-4 py-4 lg:py-24 lg:px-8">
         <div className="mx-auto max-w-6xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">Blog</p>
-          <h1 className="mt-4 text-xl font-semibold text-[#262263] sm:text-5xl">Insights and product stories</h1>
+          <h1 className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">Blog</h1>
+          <p className="mt-4 text-xl font-semibold text-[#262263] sm:text-3xl">Insights and product stories</p>
           <div className="mt-10 grid gap-4 md:grid-cols-2">
             {posts.map((post) => (
               <article key={post.slug} className="rounded-md border border-[#262263]/10 bg-[#f7fbfc] p-2 shadow-sm">
