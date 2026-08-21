@@ -179,6 +179,10 @@ iframe {
     text-decoration: none;
 }
 
+.content-single p, .content-single ul, .content-single ol, .content-single h1, .content-single h2, .content-single h3, .content-single h4, .content-single h5, .content-single h6, .content-single blockquote, .content-single pre, .content-single table, .content-single hr, .content-single strong {
+    margin-bottom: 1.5rem;
+}
+
 @media screen and (max-width: 1024px) {
     .video-section + .counters-section {
         margin-top: 0;
