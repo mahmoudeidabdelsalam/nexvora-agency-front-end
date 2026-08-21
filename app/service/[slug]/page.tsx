@@ -31,7 +31,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           imageFeatured={service?.featuredImage?.node?.sourceUrl ?? ""}
         />
         <div className="mx-auto max-w-7xl pt-60 px-6 sm:pt-54 lg:px-8">
-          <div className="mt-8 bg-white/10 px-6 lg:px-8 relative" dangerouslySetInnerHTML={{ __html: service?.content ?? "<p>This service is coming soon.</p>" }} />
+          <div className="mt-8 bg-white/10 px-6 lg:px-8 relative mb-8" dangerouslySetInnerHTML={{ __html: service?.content ?? "<p>This service is coming soon.</p>" }} />
           <Projects projects={service?.serviceFields?.projects ?? []} widthCol="1" />
           <div className="mt-10">
             <Link href="/" className="text-sm font-semibold text-[#0997AA]">← Back to home</Link>
