@@ -49,7 +49,38 @@ jobs:
           test -f out/index.html
           test -f out/service/index.html
           test -f out/blog/index.html
+
+          echo "Service routes:"
+          find out/service -maxdepth 2 -type f | sort
+
+          echo "Blog routes:"
+          find out/blog -maxdepth 2 -type f | sort
+
           echo "Static export verified successfully."
+
+      - name: Check generated service routes
+        run: |
+          echo "================================"
+          echo "Generated Service Routes"
+          echo "================================"
+
+          find out/service -mindepth 1 -maxdepth 2 -type f -name "index.html" | sort
+
+          echo ""
+          echo "================================"
+          echo "Checking old slug"
+          echo "================================"
+
+          if [ -d "out/service/digital-markiting" ]; then
+            echo "❌ OLD SLUG FOUND: digital-markiting"
+            exit 1
+          else
+            echo "✅ Old slug not found"
+          fi
+
+          if [ -d "out/service/digital-marketing-advertising" ]; then
+            echo "✅ New slug found"
+          fi
 
       - name: Deploy to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
