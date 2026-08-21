@@ -10,6 +10,14 @@ type HeroProps = {
   video?: string;
   contactMap?: string;
   imageFeatured?: string;
+  founderName?: string;
+  founderTitle?: string;
+  founderText?: string;
+  imageFounder?: string;
+  founderSocialLinks?: {
+    socialLinkName: string;
+    socialLinkUrl: string;
+  }[];
 };
 
 export default function Hero({
@@ -22,6 +30,11 @@ export default function Hero({
   video,
   contactMap,
   imageFeatured,
+  imageFounder,
+  founderSocialLinks,
+  founderName,
+  founderTitle,
+  founderText,
 }: HeroProps) {
   return (
     <section className={`relative px-6 pt-24 sm:pt-28 lg:px-8 ${video ? "video-section" : ""} hero-section`}>
@@ -31,36 +44,91 @@ export default function Hero({
           style={{ backgroundImage: `url(${bgimageurl})` }}
         />
       )}
-      <div className="relative mx-auto flex flex-col max-w-7xl">
-        <div className="pb-4 lg:pb-14">
-          <ScrollReveal animation="fadeInLeft">
-            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">
-              {eyebrow}
-            </p>
-          </ScrollReveal>
-          <ScrollReveal animation="fadeInLeft" delay={80}>
-            <h2 className="max-w-3xl text-2xl font-semibold leading-[1.05] text-[#262263] sm:text-4xl lg:text-6xl">
-              {heading}
-            </h2>
-          </ScrollReveal>
-          <ScrollReveal animation="fadeInLeft" delay={160}>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-              {subtext}
-            </p>
-          </ScrollReveal>
-          {ctaLink && (
-            <ScrollReveal animation="fadeInLeft" delay={240}>
-              <div className="mt-8 flex flex-wrap gap-4">
-              <a
-                href={ctaLink}
-                className="rounded-md bg-[#0997AA] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
-              >
-                {ctaLabel}
-              </a>
-              </div>
-            </ScrollReveal>
-          )}
+
+      {imageFounder || founderSocialLinks || founderName || founderTitle || founderText ? (
+        <div className="relative mx-auto flex flex-col max-w-7xl founder-section">
+          <div className="flex flex-col items-center justify-center gap-4 text-center founder-info">
+            {imageFounder && (
+              <ScrollReveal animation="fadeInUp" delay={120}>
+                <div className="w-32 h-32 rounded-full overflow-hidden shadow-lg shadow-[#262263]/10">
+                  <img
+                    className="w-full h-full object-cover"
+                    src={imageFounder}
+                    alt={founderName}
+                  />
+                </div>
+              </ScrollReveal>
+            )}
+            {founderName && (
+              <ScrollReveal animation="fadeInUp" delay={160}>
+                <h3 className="text-xl font-semibold text-[#262263]">{founderName}</h3>
+              </ScrollReveal>
+            )}
+            {founderTitle && (
+              <ScrollReveal animation="fadeInUp" delay={200}>
+                <p className="text-sm text-slate-600">{founderTitle}</p>
+              </ScrollReveal>
+            )}
+            {founderSocialLinks && founderSocialLinks.length > 0 && (
+              <ScrollReveal animation="fadeInUp" delay={280}>
+                <div className="mb-2 flex gap-4">
+                  {founderSocialLinks.map((link, index) => (
+                    <a
+                      key={index}
+                      href={link.socialLinkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#0997AA] hover:text-[#066D7A] uppercase text-sm font-semibold tracking-[0.28em]"
+                    >
+                      {link.socialLinkName}
+                    </a>
+                  ))}
+                </div>
+              </ScrollReveal>
+            )}
+            {founderText && (
+              <ScrollReveal animation="fadeInUp" delay={240}>
+                <p className="max-w-2xl text-lg leading-8 text-slate-600">{founderText}</p>
+              </ScrollReveal>
+            )}
+          </div>
         </div>
+      ) : null}
+       
+      
+        <div className="relative mx-auto flex flex-col max-w-7xl">
+        {eyebrow || heading || subtext || ctaLabel || ctaLink ? (
+          <div className="pb-4 lg:pb-14">
+            <ScrollReveal animation="fadeInLeft">
+              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">
+                {eyebrow}
+              </p>
+            </ScrollReveal>
+            <ScrollReveal animation="fadeInLeft" delay={80}>
+              <h2 className="max-w-3xl text-2xl font-semibold leading-[1.05] text-[#262263] sm:text-4xl lg:text-6xl">
+                {heading}
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal animation="fadeInLeft" delay={160}>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+                {subtext}
+              </p>
+            </ScrollReveal>
+            {ctaLink && (
+              <ScrollReveal animation="fadeInLeft" delay={240}>
+                <div className="mt-8 flex flex-wrap gap-4">
+                <a
+                  href={ctaLink}
+                  className="rounded-md bg-[#0997AA] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
+                >
+                  {ctaLabel}
+                </a>
+                </div>
+              </ScrollReveal>
+            )}
+          </div>
+        ) : null}
+       
 
         {video && (
           <ScrollReveal animation="fadeInUp" delay={120}>
@@ -77,7 +145,7 @@ export default function Hero({
 
         {contactMap && (
            <ScrollReveal animation="fadeInUp" delay={120}>
-             <div className="mt-8 flex flex-col items-center justify-center gap-4 text-center globally">
+             <div className="mt-8 flex flex-col items-center justify-center gap-4 text-center global-hero">
                 <div
                   className="w-full max-w-7xl h-120 rounded-md overflow-hidden shadow-lg shadow-[#262263]/10 m-auto"
                   dangerouslySetInnerHTML={{
@@ -90,7 +158,7 @@ export default function Hero({
 
         {imageFeatured && (
            <ScrollReveal animation="fadeInUp" delay={120}>
-             <div className="flex flex-col items-center justify-center gap-4 text-center globally pb-5">
+             <div className="flex flex-col items-center justify-center gap-4 text-center global-hero pb-5">
                 <div className="w-full max-w-7xl h-180 bg-white rounded-md overflow-hidden shadow-lg shadow-[#262263]/10 m-auto p-2 lg:p-3">
                   <img className="w-full h-full object-cover object-top" src={imageFeatured} alt={heading} />
                 </div>

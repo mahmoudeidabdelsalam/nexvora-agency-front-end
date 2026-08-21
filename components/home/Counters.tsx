@@ -29,7 +29,7 @@ export default function Counters({ counters, heading, subheading }: { counters: 
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-white/10 px-4 py-4 lg:py-16 lg:px-8 relative counters-section">
+    <section ref={sectionRef} className="bg-white/10 px-4 py-4 lg:py-20 lg:px-8 relative counters-section">
       <div className="mt-4 mb-4 lg:mt-12 mx-auto max-w-7xl relative z-2">
         <h2 className={`text-xl font-semibold leading-[1.05] text-[#262263] sm:text-2xl lg:text-3xl flex flex-row gap-4 items-center ${isVisible ? "animated fadeInLeft" : "opacity-0"}`}>
           <svg width="30px" height="30px" viewBox="0 0 270 236" version="1.1">

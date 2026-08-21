@@ -13,6 +13,14 @@ query About {
         boxBgColor
         boxTextColor
       }
+      nameFounder
+      imageFounder { node { sourceUrl } }
+      textFounder
+      titleFounder
+      founderSocialLinks {
+        socialLinkName
+        socialLinkUrl
+      }
     }
   }
   homepageSettings {

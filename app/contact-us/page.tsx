@@ -13,7 +13,7 @@ export default async function ContactPage() {
 
   return (
     <>
-      <main className="bg-white">
+      <main className="bg-white mb-30">
         <Hero
           eyebrow="CONTACT"
           heading={contactHeadline ?? ""}
@@ -24,7 +24,7 @@ export default async function ContactPage() {
           bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
           contactMap={contactMap ?? ""}
         />
-        <div className="mx-auto mt-16 justify-center items-center max-w-7xl sm:mt-20 lg:mt-24 grid gap-4 lg:gap-8 grid-cols-1 lg:grid-cols-2 lg:gap-4 lg:gap-16 stats-section">
+        <div className="mx-auto mt-16 justify-center items-center max-w-7xl sm:mt-20 lg:mt-24 grid gap-4 lg:gap-8 grid-cols-1 lg:grid-cols-2 contact-section">
           <dl className="grid grid-cols-1 gap-x-8 gap-y-4 px-4 sm:px-6 lg:px-8 lg:pt-8">
             {contactInformation.map((info, index) => (
               <div key={index} className="relative">
@@ -45,7 +45,7 @@ export default async function ContactPage() {
             ))}
           </dl>
 
-          <div className="rounded-2xl bg-white p-8 shadow-lg shadow-[#262263]/10 sm:p-10 lg:flex lg:flex-col lg:justify-center">
+          <div className="rounded-2xl bg-white p-8 shadow-lg shadow-[#262263]/10 sm:p-10 lg:flex lg:flex-col lg:justify-center mt-20">
             <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Get in touch</h2>
             <p className="mt-6 text-base leading-7 text-gray-600">
               Fill out the form and we will get back to you as soon as possible.
@@ -58,8 +58,8 @@ export default async function ContactPage() {
       </main>
       <Footer
         bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl}
-        ctaLabel={homepageFields?.heroCtaLabel ?? ""}
-        ctaLink={homepageFields?.heroCtaLink ?? ""}
+        ctaLabel={""}
+        ctaLink={""}
       />
     </>
   );

@@ -13,6 +13,14 @@ export type AboutPageFields = {
     boxBgColor: string;
     boxTextColor: string;
   }[];
+  nameFounder: string;
+  imageFounder: ImageNode;
+  textFounder: string;
+  titleFounder: string;
+  founderSocialLinks: {
+    socialLinkName: string;
+    socialLinkUrl: string;
+  }[];
 };
 
 export type AboutPageData = {

@@ -25,6 +25,20 @@ export default async function AboutPage() {
         />
         <Counters counters={homepageFields?.counters ?? []} heading={homepageFields?.countersHeadline ?? ""} subheading={homepageFields?.countersSubText ?? ""} />
         <ClientLogos logos={homepageFields?.clientLogos ?? []} />
+        <Hero
+          eyebrow={""}
+          heading={""}
+          subtext={""}
+          video={""}
+          ctaLabel={""}
+          ctaLink={""}
+          bgimageurl={""}
+          imageFounder={aboutpageFields?.imageFounder?.node.sourceUrl}
+          founderSocialLinks={aboutpageFields?.founderSocialLinks ?? []}
+          founderName={aboutpageFields?.nameFounder ?? ""}
+          founderTitle={aboutpageFields?.titleFounder ?? ""}
+          founderText={aboutpageFields?.textFounder ?? ""}
+        />
         <BoxAbout boxAbout={aboutpageFields?.boxAbout ?? []} />
       </main>
       <Footer bgimageurl={homepageFields?.bgimageurl?.node.sourceUrl} ctaLabel={homepageFields?.heroCtaLabel ?? ""} ctaLink={homepageFields?.heroCtaLink ?? ""} />
