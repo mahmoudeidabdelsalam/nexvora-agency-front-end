@@ -32,6 +32,8 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         />
         <div className="mx-auto max-w-7xl px-6 py-4 lg:px-8">
           <div className="mt-8 bg-white/10 relative mb-8" dangerouslySetInnerHTML={{ __html: service?.serviceFields?.codeHtml ?? "<p>This service is coming soon.</p>" }} />
+        </div>
+        <div className="mx-auto max-w-7xl">
           <Projects projects={service?.serviceFields?.projects ?? []} widthCol="1" />
           <div className="mt-10">
             <Link href="/" className="text-sm font-semibold text-[#0997AA]">← Back to home</Link>

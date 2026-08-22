@@ -5,6 +5,13 @@ query BlogPosts {
       slug
       title
       excerpt
+      date
+      categories {
+        nodes {
+          name
+          slug
+        }
+      }
       featuredImage {
         node {
           sourceUrl
@@ -27,6 +34,13 @@ query BlogPostBySlug($slug: ID!) {
     slug
     title
     content
+    date
+    categories {
+      nodes {
+        name
+        slug
+      }
+    }
     featuredImage {
       node {
         sourceUrl

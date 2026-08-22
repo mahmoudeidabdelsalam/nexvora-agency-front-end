@@ -1,9 +1,18 @@
 import type { ImageNode } from "./common";
 
+export type BlogPostCategory = {
+  name: string;
+  slug: string;
+};
+
 export type BlogPostSummary = {
   slug: string;
   title: string;
   excerpt: string;
+  date?: string | null;
+  categories?: {
+    nodes?: BlogPostCategory[] | null;
+  } | null;
   featuredImage?: {
     node?: {
       sourceUrl?: string;
