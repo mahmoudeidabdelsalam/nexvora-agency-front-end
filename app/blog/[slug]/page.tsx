@@ -29,8 +29,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           contactMap=""
           imageFeatured={post?.featuredImage?.node?.sourceUrl ?? ""}
         />
-        <div className="mx-auto max-w-4xl">
-          <div className="mt-60 prose max-w-none text-slate-600 content-single" dangerouslySetInnerHTML={{ __html: post?.content ?? "<p>This page is rendered from WordPress content.</p>" }} />
+        <div className="mx-auto max-w-6xl px-6 py-4 lg:px-8">
+          <div className="prose max-w-none text-slate-600 content-single" dangerouslySetInnerHTML={{ __html: post?.content ?? "<p>This page is rendered from WordPress content.</p>" }} />
           <div className="mt-10">
             <Link href="/blog" className="text-sm font-semibold text-[#0997AA]">← Back to blog</Link>
           </div>

@@ -10,7 +10,7 @@ export default async function BlogPage() {
 
   return (
     <>
-      <main className="bg-white px-4 py-4 lg:py-24 lg:px-8">
+      <main className="bg-white px-4 py-10 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <h1 className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">Blog</h1>
           <p className="mt-4 text-xl font-semibold text-[#262263] sm:text-3xl">Insights and product stories</p>

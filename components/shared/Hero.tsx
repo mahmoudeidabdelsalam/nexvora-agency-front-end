@@ -175,7 +175,7 @@ export default function Hero({
 
           {imageFeatured && (
             <ScrollReveal animation="fadeInUp" delay={120}>
-              <div className="flex flex-row pb-5">
+              <div className="flex flex-col lg:flex-row pb-5">
                 {eyebrow || heading || subtext || ctaLabel || ctaLink ? (
                   <div className="flex-1/2">
                     <ScrollReveal animation="fadeInLeft">
@@ -219,7 +219,7 @@ export default function Hero({
                     </div>
                   </div>
                 ) : null}
-                  <div className="flex-1/2 h-120 bg-white rounded-md overflow-hidden shadow-lg shadow-[#262263]/10 m-auto p-2 lg:p-3">
+                  <div className="flex-1/2 mt-4 h-120 bg-white rounded-md overflow-hidden shadow-lg shadow-[#262263]/10 m-auto p-2 lg:p-3">
                     <img className="w-full h-full object-cover object-top" src={imageFeatured} alt={heading} />
                   </div>
                 </div>
