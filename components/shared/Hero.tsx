@@ -38,7 +38,7 @@ export default function Hero({
   founderText,
 }: HeroProps) {
   return (
-    <section className={`relative h-screen bg-white px-6 lg:px-8 ${video ? "video-section" : ""} hero-section`}>
+    <section className={`relative ${eyebrow || heading || subtext || ctaLabel || ctaLink  ? "h-screen" : "pt-20"} bg-white px-6 lg:px-8 ${video ? "video-section" : ""} hero-section`}>
       {bgimageurl && (
         <div
           className="absolute inset-0 bg-cover bg-top-right bg-no-repeat"
@@ -47,7 +47,7 @@ export default function Hero({
       )}
 
       {imageFounder || founderSocialLinks || founderName || founderTitle || founderText ? (
-        <div className="relative mx-auto flex flex-col max-w-7xl founder-section">
+        <div className="relative mx-auto flex flex-col max-w-7xl founder-section justify-center h-full">
           <div className="flex flex-col items-center justify-center gap-4 text-center founder-info">
             {imageFounder && (
               <ScrollReveal animation="fadeInUp" delay={120}>
@@ -99,7 +99,7 @@ export default function Hero({
       
         <div className="relative mx-auto flex flex-col max-w-7xl justify-center h-full">
         {eyebrow || heading || subtext || ctaLabel || ctaLink ? (
-          <div className="pb-4 lg:pb-24">
+          <div className="pb-4 lg:py-24">
             <ScrollReveal animation="fadeInLeft">
               <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">
                 {eyebrow}
@@ -145,7 +145,7 @@ export default function Hero({
 
         {video && (
           <ScrollReveal animation="fadeInUp" delay={120}>
-            <div className="mt-8 flex flex-col items-center justify-center gap-4 text-center video">
+            <div className="mt-8 flex flex-col items-center justify-center gap-4 text-center video z-2">
               <div
                 className="w-full max-w-7xl aspect-video rounded-md overflow-hidden shadow-lg shadow-[#262263]/10"
                 dangerouslySetInnerHTML={{
