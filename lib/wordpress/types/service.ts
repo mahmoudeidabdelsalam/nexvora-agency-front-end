@@ -25,6 +25,7 @@ export type Service = {
   serviceFields: {
     summary?: string;
     icon?: ImageNode | null;
+    codeHtml?: string;
     projects: {
       projectsHeadline: string;
       projectsSubText: string;

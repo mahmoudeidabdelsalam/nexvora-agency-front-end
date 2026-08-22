@@ -38,7 +38,7 @@ export default function Hero({
   founderText,
 }: HeroProps) {
   return (
-    <section className={`relative ${eyebrow || heading || subtext || ctaLabel || ctaLink  ? "lg:h-screen py-20 lg:py-0" : "pt-20"} bg-white px-6 lg:px-8 ${video ? "video-section" : ""} hero-section`}>
+    <section className={`relative ${eyebrow || heading || subtext || ctaLabel || ctaLink ? "lg:h-screen py-20 lg:py-0" : "pt-20"} bg-white px-6 lg:px-8 ${video ? "video-section" : ""} hero-section`}>
       {bgimageurl && (
         <div
           className="absolute inset-0 bg-cover bg-top-right bg-no-repeat"
@@ -98,86 +98,133 @@ export default function Hero({
        
       
         <div className="relative mx-auto flex flex-col max-w-7xl justify-center h-full">
-        {eyebrow || heading || subtext || ctaLabel || ctaLink ? (
-          <div className="pb-4 lg:py-24">
-            <ScrollReveal animation="fadeInLeft">
-              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">
-                {eyebrow}
-              </p>
-            </ScrollReveal>
-            <ScrollReveal animation="fadeInLeft" delay={80}>
-              <h2 className="max-w-3xl text-2xl font-semibold leading-[1.05] text-[#262263] sm:text-4xl lg:text-6xl">
-                {heading}
-              </h2>
-            </ScrollReveal>
-            <ScrollReveal animation="fadeInLeft" delay={160}>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-                {subtext}
-              </p>
-            </ScrollReveal>
-            {ctaLink && (
-              <ScrollReveal animation="fadeInLeft" delay={240}>
-                <div className="mt-8 flex flex-wrap gap-4">
-                <a
-                  href={ctaLink}
-                  className="rounded-md px-12 border border-[#0997AA]  py-3 text-sm font-semibold text-[#0997AA] shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
-                >
-                  {ctaLabel}
-                  <span className="ml-2" aria-hidden="true">→</span>
-                </a>
+          {!imageFeatured && (
+            <>
+            {eyebrow || heading || subtext || ctaLabel || ctaLink ? (
+              <div className="pb-4 lg:py-24">
+                <ScrollReveal animation="fadeInLeft">
+                  <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">
+                    {eyebrow}
+                  </p>
+                </ScrollReveal>
+                <ScrollReveal animation="fadeInLeft" delay={80}>
+                  <h2 className="max-w-3xl text-2xl font-semibold leading-[1.05] text-[#262263] sm:text-4xl lg:text-6xl">
+                    {heading}
+                  </h2>
+                </ScrollReveal>
+                <ScrollReveal animation="fadeInLeft" delay={160}>
+                  <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+                    {subtext}
+                  </p>
+                </ScrollReveal>
+                {ctaLink && (
+                  <ScrollReveal animation="fadeInLeft" delay={240}>
+                    <div className="mt-8 flex flex-wrap gap-4">
+                    <a
+                      href={ctaLink}
+                      className="rounded-md px-12 border border-[#0997AA]  py-3 text-sm font-semibold text-[#0997AA] shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
+                    >
+                      {ctaLabel}
+                      <span className="ml-2" aria-hidden="true">→</span>
+                    </a>
 
-                <a
-                  href="/about-us/"
-                  className="rounded-md px-12 border bg-[#0997AA]  py-3 text-sm font-semibold text-white shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
-                >
-                  Learn More
-                  <span className="ml-2" aria-hidden="true">→</span>
-                </a>
+                    <a
+                      href="/about-us/"
+                      className="rounded-md px-12 border bg-[#0997AA]  py-3 text-sm font-semibold text-white shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
+                    >
+                      Learn More
+                      <span className="ml-2" aria-hidden="true">→</span>
+                    </a>
+                    </div>
+                  </ScrollReveal>
+                )}
+                <div className="absolute top-0 right-0 w-full h-full flex items-center justify-end pointer-events-none">
+                  <AnimatedNexus />
                 </div>
-              </ScrollReveal>
-            )}
-            <div className="absolute top-0 right-0 w-full h-full flex items-center justify-end pointer-events-none">
-              <AnimatedNexus />
-            </div>
-          </div>
-        ) : null}
+              </div>
+            ) : null}
+            </>
+          )}
        
 
-        {video && (
-          <ScrollReveal animation="fadeInUp" delay={120}>
-            <div className="mt-8 flex flex-col items-center justify-center gap-4 text-center video z-2">
-              <div
-                className="w-full max-w-7xl aspect-video rounded-md overflow-hidden shadow-lg shadow-[#262263]/10"
-                dangerouslySetInnerHTML={{
-                  __html: video || "",
-                }}
-              />
-            </div>
-          </ScrollReveal>
-        )}
-
-        {contactMap && (
-           <ScrollReveal animation="fadeInUp" delay={120}>
-             <div className="mt-8 flex flex-col items-center justify-center gap-4 text-center global-hero">
+          {video && (
+            <ScrollReveal animation="fadeInUp" delay={120}>
+              <div className="mt-8 flex flex-col items-center justify-center gap-4 text-center video z-2">
                 <div
-                  className="w-full max-w-7xl h-120 rounded-md overflow-hidden shadow-lg shadow-[#262263]/10 m-auto"
+                  className="w-full max-w-7xl aspect-video rounded-md overflow-hidden shadow-lg shadow-[#262263]/10"
                   dangerouslySetInnerHTML={{
-                    __html: contactMap || "",
+                    __html: video || "",
                   }}
                 />
               </div>
-          </ScrollReveal>
-        )}
+            </ScrollReveal>
+          )}
 
-        {imageFeatured && (
-           <ScrollReveal animation="fadeInUp" delay={120}>
-             <div className="flex flex-col items-center justify-center gap-4 text-center global-hero pb-5">
-                <div className="w-full max-w-7xl h-180 bg-white rounded-md overflow-hidden shadow-lg shadow-[#262263]/10 m-auto p-2 lg:p-3">
-                  <img className="w-full h-full object-cover object-top" src={imageFeatured} alt={heading} />
+          {contactMap && (
+            <ScrollReveal animation="fadeInUp" delay={120}>
+              <div className="mt-8 flex flex-col items-center justify-center gap-4 text-center global-hero">
+                  <div
+                    className="w-full max-w-7xl h-120 rounded-md overflow-hidden shadow-lg shadow-[#262263]/10 m-auto"
+                    dangerouslySetInnerHTML={{
+                      __html: contactMap || "",
+                    }}
+                  />
                 </div>
-              </div>
-          </ScrollReveal>
-        )}
+            </ScrollReveal>
+          )}
+
+          {imageFeatured && (
+            <ScrollReveal animation="fadeInUp" delay={120}>
+              <div className="flex flex-row pb-5">
+                {eyebrow || heading || subtext || ctaLabel || ctaLink ? (
+                  <div className="flex-1/2">
+                    <ScrollReveal animation="fadeInLeft">
+                      <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">
+                        {eyebrow}
+                      </p>
+                    </ScrollReveal>
+                    <ScrollReveal animation="fadeInLeft" delay={80}>
+                      <h2 className="max-w-3xl text-2xl font-semibold leading-[1.05] text-[#262263] sm:text-4xl lg:text-6xl">
+                        {heading}
+                      </h2>
+                    </ScrollReveal>
+                    <ScrollReveal animation="fadeInLeft" delay={160}>
+                      <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+                        {subtext}
+                      </p>
+                    </ScrollReveal>
+                    {ctaLink && (
+                      <ScrollReveal animation="fadeInLeft" delay={240}>
+                        <div className="mt-8 flex flex-wrap gap-4">
+                        <a
+                          href={ctaLink}
+                          className="rounded-md px-12 border border-[#0997AA]  py-3 text-sm font-semibold text-[#0997AA] shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
+                        >
+                          {ctaLabel}
+                          <span className="ml-2" aria-hidden="true">→</span>
+                        </a>
+
+                        <a
+                          href="/about-us/"
+                          className="rounded-md px-12 border bg-[#0997AA]  py-3 text-sm font-semibold text-white shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
+                        >
+                          Learn More
+                          <span className="ml-2" aria-hidden="true">→</span>
+                        </a>
+                        </div>
+                      </ScrollReveal>
+                    )}
+                    <div className="absolute top-0 right-0 w-full h-full flex items-center justify-end pointer-events-none">
+                      <AnimatedNexus />
+                    </div>
+                  </div>
+                ) : null}
+                  <div className="flex-1/2 h-120 bg-white rounded-md overflow-hidden shadow-lg shadow-[#262263]/10 m-auto p-2 lg:p-3">
+                    <img className="w-full h-full object-cover object-top" src={imageFeatured} alt={heading} />
+                  </div>
+                </div>
+            </ScrollReveal>
+          )}
       </div>
     </section>
   );

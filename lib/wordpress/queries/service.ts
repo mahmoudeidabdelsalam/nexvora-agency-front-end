@@ -39,6 +39,7 @@ query ServiceBySlug($slug: ID!) {
     serviceFields {
       summary
       icon { node { sourceUrl altText } }
+      codeHtml
       projects {
         projectsHeadline
         projectsSubText
