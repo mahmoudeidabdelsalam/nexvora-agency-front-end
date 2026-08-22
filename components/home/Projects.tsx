@@ -13,7 +13,7 @@ export default function Projects({ projects, widthCol }: { projects: project[]; 
               style={{ backgroundColor: item.projectsBgColor }}
             >
               <a href={item.projectsLink} className="absolute inset-0 z-10" target="_blank" rel="noopener noreferrer" aria-label={`View details for ${item.projectsHeadline}`}></a>
-              <div className="img-projects p-12 flex-1/2">
+              <div className="img-projects lg:p-12 p-2 flex-1/2">
                 {item.projectsImage.node.sourceUrl && (
                   <img
                     key={index}

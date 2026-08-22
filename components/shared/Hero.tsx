@@ -38,7 +38,7 @@ export default function Hero({
   founderText,
 }: HeroProps) {
   return (
-    <section className={`relative ${eyebrow || heading || subtext || ctaLabel || ctaLink  ? "h-screen" : "pt-20"} bg-white px-6 lg:px-8 ${video ? "video-section" : ""} hero-section`}>
+    <section className={`relative ${eyebrow || heading || subtext || ctaLabel || ctaLink  ? "lg:h-screen py-20 lg:py-0" : "pt-20"} bg-white px-6 lg:px-8 ${video ? "video-section" : ""} hero-section`}>
       {bgimageurl && (
         <div
           className="absolute inset-0 bg-cover bg-top-right bg-no-repeat"
