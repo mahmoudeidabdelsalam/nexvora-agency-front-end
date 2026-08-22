@@ -1,4 +1,5 @@
 import ScrollReveal from "./ScrollReveal";
+import AnimatedNexus from "@/components/hero/AnimatedNexus";
 
 type HeroProps = {
   eyebrow: string;
@@ -37,7 +38,7 @@ export default function Hero({
   founderText,
 }: HeroProps) {
   return (
-    <section className={`relative px-6 pt-24 sm:pt-28 lg:px-8 ${video ? "video-section" : ""} hero-section`}>
+    <section className={`relative h-screen bg-white px-6 lg:px-8 ${video ? "video-section" : ""} hero-section`}>
       {bgimageurl && (
         <div
           className="absolute inset-0 bg-cover bg-top-right bg-no-repeat"
@@ -96,9 +97,9 @@ export default function Hero({
       ) : null}
        
       
-        <div className="relative mx-auto flex flex-col max-w-7xl">
+        <div className="relative mx-auto flex flex-col max-w-7xl justify-center h-full">
         {eyebrow || heading || subtext || ctaLabel || ctaLink ? (
-          <div className="pb-4 lg:pb-14">
+          <div className="pb-4 lg:pb-24">
             <ScrollReveal animation="fadeInLeft">
               <p className="mb-4 text-sm font-semibold uppercase tracking-[0.28em] text-[#0997AA]">
                 {eyebrow}
@@ -119,13 +120,25 @@ export default function Hero({
                 <div className="mt-8 flex flex-wrap gap-4">
                 <a
                   href={ctaLink}
-                  className="rounded-md bg-[#0997AA] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
+                  className="rounded-md px-12 border border-[#0997AA]  py-3 text-sm font-semibold text-[#0997AA] shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
                 >
                   {ctaLabel}
+                  <span className="ml-2" aria-hidden="true">→</span>
+                </a>
+
+                <a
+                  href="/about-us/"
+                  className="rounded-md px-12 border bg-[#0997AA]  py-3 text-sm font-semibold text-white shadow-lg shadow-[#0997AA]/20 transition-transform hover:-translate-y-0.5"
+                >
+                  Learn More
+                  <span className="ml-2" aria-hidden="true">→</span>
                 </a>
                 </div>
               </ScrollReveal>
             )}
+            <div className="absolute top-0 right-0 w-full h-full flex items-center justify-end pointer-events-none">
+              <AnimatedNexus />
+            </div>
           </div>
         ) : null}
        
