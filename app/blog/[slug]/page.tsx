@@ -50,7 +50,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <span>•</span>
                 <div className="flex flex-wrap items-center gap-2">
                   {categories.map((category) => (
-                    <span key={category.slug} className="rounded-full border border-[#0997AA]/20 bg-[#0997AA]/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#0997AA]">
+                    <span key={category.slug} className="rounded-full border border-[#0997AA]/20 bg-[#0997AA]/5 px-3 py-1 text-xs font-semibold tracking-[0.14em] text-[#0997AA]">
                       {category.name}
                     </span>
                   ))}

@@ -8,7 +8,7 @@ export default function Stats({ stats, heading, subheading }: { stats: ServiceLi
       <div className="pattern"></div>
       <div className="mx-auto grid max-w-7xl relative z-2 grid-cols-1 gap-0">
         <ScrollReveal animation="fadeInLeft">
-          <h2 className="text-xl font-bold leading-[1.05] text-white sm:text-2xl lg:text-3xl mb-2 uppercase flex flex-row items-center gap-4">
+          <h2 className="text-xl font-bold leading-[1.05] text-white sm:text-2xl lg:text-3xl mb-2 flex flex-row items-center gap-4">
             <svg width="30px" height="30px" viewBox="0 0 270 236" version="1.1">
               <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                   <g id="NEXVORA-" transform="translate(-1917, -683)" fill="#0997AA" fillRule="nonzero">
