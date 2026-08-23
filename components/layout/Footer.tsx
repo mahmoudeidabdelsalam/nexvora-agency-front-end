@@ -36,6 +36,13 @@ const COLUMNS = [
   },
 ] as const;
 
+const SOCIAL_LINKS = [
+  { label: "Facebook", url: "https://www.facebook.com/profile.php?id=61593275467400" },
+  { label: "Instagram", url: "https://www.instagram.com/nexvora_company?igsi=M2x4MnB1NjhkcnZ2&utm_source=qr" },
+  { label: "LinkedIn", url: "https://www.linkedin.com/company/142004047/admin/dashboard/" },
+  { label: "X", url: "#" },
+] as const;
+
 type FooterProps = {
   bgimageurl?: string;
   ctaLabel?: string;
@@ -74,7 +81,7 @@ export default function Footer({ bgimageurl, ctaLabel, ctaLink }: FooterProps) {
           </div>
         </section>
       )}
-      <footer className="px-6 py-18 text-[#262263] lg:px-8 relative z-2">
+      <footer className="px-6 pt-18 pb-6 text-[#262263] lg:px-8 relative z-2">
         <div className="mx-auto grid max-w-7xl gap-4 lg:gap-10 md:grid-cols-4">
           <div>
             <div className="flex items-center gap-4 lg:gap-3">
@@ -105,9 +112,23 @@ export default function Footer({ bgimageurl, ctaLabel, ctaLink }: FooterProps) {
             </div>
           ))}
         </div>
-        <p className="mx-auto mt-12 max-w-7xl border-t border-[#262263]/40 pt-6 text-xs text-[#262263]/60 relative z-2">
-        copyright reserved © NEXVORA, {new Date().getFullYear()}
-        </p>
+        <div className="mx-auto mt-12 flex max-w-7xl flex-col gap-4 border-t border-[#262263]/40 pt-6 text-xs text-[#262263]/60 relative z-2 sm:flex-row sm:items-center sm:justify-between">
+          <p className="transition-colors text-[#0997AA] hover:text-[#262263] font-semibold tracking-[0.18em]">Copyright Reserved © NEXVORA, {new Date().getFullYear()}</p>
+          <div className="flex flex-wrap items-center gap-3 sm:justify-end">
+            {SOCIAL_LINKS.map((social) => (
+              <a
+                key={social.label}
+                href={social.url}
+                target={social.url.startsWith("http") ? "_blank" : undefined}
+                rel={social.url.startsWith("http") ? "noreferrer" : undefined}
+                className="transition-colors text-[#0997AA] hover:text-[#262263] uppercase font-semibold tracking-[0.28em]"
+                aria-label={social.label}
+              >
+                {social.label}
+              </a>
+            ))}
+          </div>
+        </div>
       </footer>
       
       <a href="https://wa.me/+201150773787" target="_blank" className="whatsapp" aria-label="Chat on WhatsApp">
