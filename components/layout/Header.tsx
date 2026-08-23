@@ -74,25 +74,25 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
             type="button"
             aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileOpen}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(16,25,54,0.08)] bg-white/70 text-(--secondary) shadow-[0_4px_12px_rgba(15,23,42,0.04)] transition-colors duration-200 hover:border-[rgba(79,70,255,0.2)] hover:text-(--primary) md:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-md border border-[rgba(16,25,54,0.08)] bg-white/70 text-(--secondary) shadow-[0_4px_12px_rgba(15,23,42,0.04)] transition-colors duration-200 hover:border-[rgba(79,70,255,0.2)] hover:text-(--primary) md:hidden"
             onClick={() => setMobileOpen((current) => !current)}
           >
             <span className="relative h-4 w-5">
               <span
                 className={[
-                  "absolute left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-200",
+                  "absolute left-0 h-0.5 w-5 rounded-md bg-current transition-all duration-200",
                   mobileOpen ? "top-2 rotate-45" : "top-0",
                 ].join(" ")}
               />
               <span
                 className={[
-                  "absolute left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-200",
+                  "absolute left-0 h-0.5 w-5 rounded-md bg-current transition-all duration-200",
                   mobileOpen ? "opacity-0" : "top-2 opacity-100",
                 ].join(" ")}
               />
               <span
                 className={[
-                  "absolute left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-200",
+                  "absolute left-0 h-0.5 w-5 rounded-md bg-current transition-all duration-200",
                   mobileOpen ? "top-2 -rotate-45" : "top-4",
                 ].join(" ")}
               />
@@ -127,14 +127,12 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
                         href={itemHref}
                         className={[
                           "group relative flex items-center gap-1.5 text-[15px] font-medium uppercase leading-none tracking-[-0.01em] text-(--secondary) transition-colors duration-250 ease-out hover:text-(--primary)",
-                          isActive ? "text-(--primary)" : "",
                         ].join(" ")}
                         onClick={() => setOpenMenu(null)}
                       >
                         <span
                           className={[
-                            "relative after:absolute after:-bottom-2 after:left-1/2 after:h-px after:w-full after:-translate-x-1/2 after:origin-center after:scale-x-0 after:bg-(--primary) after:transition-all after:duration-250 after:ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:after:scale-x-100",
-                            isActive ? "after:scale-x-100" : "",
+                            isActive ? "text-[#0b97ab]" : "",
                           ].join(" ")}
                         >
                           {item.label}
@@ -148,7 +146,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
                         className={[
                           "group relative flex items-center gap-1.5 text-[15px] font-medium uppercase leading-none tracking-[-0.01em] text-(--secondary) transition-colors duration-250 ease-out hover:text-(--primary)",
                           openMenu === item.label || isActive
-                            ? "text-(--primary)"
+                            ? "text-[#0b97ab]"
                             : "",
                         ].join(" ")}
                         onClick={(e) => {
@@ -160,9 +158,8 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
                       >
                         <span
                           className={[
-                            "relative after:absolute after:-bottom-2 after:left-1/2 after:h-px after:w-full after:-translate-x-1/2 after:origin-center after:scale-x-0 after:bg-(--primary) after:transition-all after:duration-250 after:ease-[cubic-bezier(0.22,1,0.36,1)]",
                             openMenu === item.label || isActive
-                              ? "after:scale-x-100"
+                              ? "text-[#0b97ab]"
                               : "",
                           ].join(" ")}
                         >
@@ -235,7 +232,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
                   {item.submenu?.length ? (
                     <button
                       type="button"
-                      className="flex h-9 w-9 items-center justify-center rounded-full text-base font-semibold text-(--primary) transition-colors hover:bg-[#F3F5FF]"
+                      className="flex h-9 w-9 items-center justify-center rounded-md text-base font-semibold text-(--primary) transition-colors hover:bg-[#F3F5FF]"
                       onClick={() => toggleMenu(item.label)}
                     >
                       {openMenu === item.label ? "−" : "+"}
@@ -261,7 +258,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
           </div>
           <Link
             href={ctaHref}
-            className="group mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#4F46FF_0%,#7C3AED_52%,#5B8CFF_100%)] px-4 py-3 text-sm font-semibold uppercase tracking-[-0.01em] text-white shadow-[0_12px_28px_rgba(79,70,255,0.2)] transition-all duration-250 hover:brightness-110"
+            className="group mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[linear-gradient(135deg,#4F46FF_0%,#7C3AED_52%,#5B8CFF_100%)] px-4 py-3 text-sm font-semibold uppercase tracking-[-0.01em] text-white shadow-[0_12px_28px_rgba(79,70,255,0.2)] transition-all duration-250 hover:brightness-110"
             onClick={() => setMobileOpen(false)}
           >
             <span>{ctaLabel}</span>
