@@ -1,6 +1,16 @@
 import ScrollReveal from "./ScrollReveal";
 import AnimatedNexus from "@/components/hero/AnimatedNexus";
 
+function toSentenceCase(value: string) {
+  if (!value) return "";
+
+  const trimmed = value.replace(/\s+/g, " ").trim();
+  if (!trimmed || trimmed !== trimmed.toUpperCase()) return trimmed;
+
+  const lowered = trimmed.toLowerCase();
+  return lowered.charAt(0).toUpperCase() + lowered.slice(1).replace(/([.!?]\s+)([a-z])/g, (_, separator, nextLetter) => `${separator}${nextLetter.toUpperCase()}`);
+}
+
 type HeroProps = {
   eyebrow: string;
   heading: string;
@@ -114,7 +124,7 @@ export default function Hero({
                 </ScrollReveal>
                 <ScrollReveal animation="fadeInLeft" delay={160}>
                   <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-                    {subtext}
+                    {toSentenceCase(subtext)}
                   </p>
                 </ScrollReveal>
                 {ctaLink && (
@@ -190,7 +200,7 @@ export default function Hero({
                     </ScrollReveal>
                     <ScrollReveal animation="fadeInLeft" delay={160}>
                       <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-                        {subtext}
+                        {toSentenceCase(subtext)}
                       </p>
                     </ScrollReveal>
                     {ctaLink && (

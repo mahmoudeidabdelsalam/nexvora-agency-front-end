@@ -1,5 +1,15 @@
 import ScrollReveal from "../shared/ScrollReveal";
 
+function toSentenceCase(value: string) {
+  if (!value) return "";
+
+  const trimmed = value.replace(/\s+/g, " ").trim();
+  if (!trimmed || trimmed !== trimmed.toUpperCase()) return trimmed;
+
+  const lowered = trimmed.toLowerCase();
+  return lowered.charAt(0).toUpperCase() + lowered.slice(1).replace(/([.!?]\s+)([a-z])/g, (_, separator, nextLetter) => `${separator}${nextLetter.toUpperCase()}`);
+}
+
 type core = { icon: { node: { sourceUrl: string } }; valuee: string; text?: string }; 
 
 export default function CoreValues({ coreValues, heading, subheading, image }: { coreValues: core[]; heading: string; subheading: string; image: { node: { sourceUrl: string } } }) {
@@ -21,7 +31,7 @@ export default function CoreValues({ coreValues, heading, subheading, image }: {
           </ScrollReveal>
           <ScrollReveal animation="fadeInLeft" delay={120}>
             <p className="mt-4 text-md leading-8 text-slate-600 max-w-3xl">
-              {subheading}
+              {toSentenceCase(subheading)}
             </p>
           </ScrollReveal>
 

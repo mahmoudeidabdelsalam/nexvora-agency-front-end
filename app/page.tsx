@@ -9,6 +9,10 @@ import Footer from "@/components/layout/Footer";
 import CoreValues from "@/components/home/CoreValues";
 import Projects from "@/components/home/Projects";
 
+export const metadata = {
+  title: "NEXVORA | Digital Growth, Product & Technology Solutions",
+  description: "We design, build, and optimize digital products, marketing systems, and business technology for ambitious organizations.",
+};
 
 export default async function HomePage() {
   const data = await getHomepageData();

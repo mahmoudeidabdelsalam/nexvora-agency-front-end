@@ -88,7 +88,7 @@ export default function Footer({ bgimageurl, ctaLabel, ctaLink }: FooterProps) {
               <img src="/logo.svg" alt="NEXVORA logo" className="h-14 w-auto" />
             </div>
             <p className="mt-4 max-w-xs text-sm leading-7 text-[#262263]">
-              INNOVATION, QUALITY, AND EXCEPTIONAL CUSTOMER SERVICE.
+              Innovation, quality, and exceptional customer service.
             </p>
           </div>
           {COLUMNS.map((col) => (

@@ -4,8 +4,8 @@ import Header from "@/components/layout/Header";
 import { getHeaderData } from "@/lib/wordpress";
 
 export const metadata: Metadata = {
-  title: "NEXVORA",
-  description: "NEXVORA IS A TECHNOLOGY SOLUTIONS COMPANY BASED IN EGYPT, DELIVERING INNOVATIVE SOFTWARE SOLUTIONS, SAAS PRODUCTS, IT INFRASTRUCTURE SERVICES, DIGITAL MARKETING, ADVERTISING, PROFESSIONAL CONSULTATIONS, AND TRAINING TO CLIENTS WORLDWIDE.",
+  title: "NEXVORA | Digital Growth, Product & Technology Solutions",
+  description: "NEXVORA helps businesses build faster digital products, smarter marketing systems, and scalable technology infrastructure across Egypt and beyond.",
   icons: {
     icon: [
       { rel: "shortcut icon", url: "/favicon/favicon.ico" },

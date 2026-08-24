@@ -5,6 +5,10 @@ import { ClientLogos } from "@/components/home/ClientLogos";
 import Footer from "@/components/layout/Footer";
 import BoxAbout from "@/components/about/BoxAbout";
 
+export const metadata = {
+  title: "About NEXVORA | Strategy, Design & Technology",
+  description: "Learn how NEXVORA partners with ambitious companies to design software, improve operations, and create digital experiences that scale.",
+};
 
 export default async function AboutPage() {
   const data = await getAboutPageData();
