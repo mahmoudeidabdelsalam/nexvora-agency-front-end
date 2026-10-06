@@ -1,0 +1,765 @@
+From d072cf820737a95603754711bc7d5cba5d66f05e Mon Sep 17 00:00:00 2001
+From: assistant <assistant@example.com>
+Date: Wed, 30 Sep 2026 16:36:24 +0000
+Subject: [PATCH] feat: NEXVORA chat+voice assistant widget and agent-readiness
+ files
+
+---
+ .github/workflows/deploy.yml                  |   1 +
+ app/layout.tsx                                |   2 +
+ components/assistant/NexvoraAssistant.tsx     | 259 ++++++++++++++++++
+ package-lock.json                             | 150 +++++++++-
+ package.json                                  |   1 +
+ public/.well-known/agent-skills/index.json    |  12 +
+ .../agent-skills/nexvora-services/SKILL.md    |  15 +
+ public/llms.txt                               |  27 ++
+ public/robots.txt                             |  17 ++
+ 9 files changed, 471 insertions(+), 13 deletions(-)
+ create mode 100644 components/assistant/NexvoraAssistant.tsx
+ create mode 100644 public/.well-known/agent-skills/index.json
+ create mode 100644 public/.well-known/agent-skills/nexvora-services/SKILL.md
+ create mode 100644 public/llms.txt
+ create mode 100644 public/robots.txt
+
+diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
+index 4a1d5bf..f5f4021 100644
+--- a/.github/workflows/deploy.yml
++++ b/.github/workflows/deploy.yml
+@@ -43,6 +43,7 @@ jobs:
+           WORDPRESS_GRAPHQL_URL: ${{ vars.WORDPRESS_GRAPHQL_URL }}
+           WORDPRESS_MEDIA_HOSTNAME: ${{ vars.WORDPRESS_MEDIA_HOSTNAME }}
+           NEXT_PUBLIC_WORDPRESS_URL: ${{ vars.NEXT_PUBLIC_WORDPRESS_URL }}
++          NEXT_PUBLIC_VOICE_API_URL: ${{ vars.NEXT_PUBLIC_VOICE_API_URL }}
+ 
+       - name: Verify static export
+         run: |
+diff --git a/app/layout.tsx b/app/layout.tsx
+index 7f97395..c21dcf3 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -1,6 +1,7 @@
+ import type { Metadata } from "next";
+ import "./globals.css";
+ import Header from "@/components/layout/Header";
++import NexvoraAssistant from "@/components/assistant/NexvoraAssistant";
+ import { getHeaderData } from "@/lib/wordpress";
+ 
+ export const metadata: Metadata = {
+@@ -48,6 +49,7 @@ export default async function RootLayout({
+           ctaHref={headerFields.linkButtonRight?.url || "/contact"}
+         />
+         {children}
++        <NexvoraAssistant />
+       </body>
+     </html>
+   );
+diff --git a/components/assistant/NexvoraAssistant.tsx b/components/assistant/NexvoraAssistant.tsx
+new file mode 100644
+index 0000000..63d4664
+--- /dev/null
++++ b/components/assistant/NexvoraAssistant.tsx
+@@ -0,0 +1,259 @@
++"use client";
++
++/**
++ * Floating chat + voice assistant for a Next.js static export.
++ * Needs: npm i livekit-client   and   NEXT_PUBLIC_VOICE_API_URL=https://<your-worker>.workers.dev
++ * Rendered once from app/layout.tsx. Renders nothing until NEXT_PUBLIC_VOICE_API_URL is set.
++ */
++import { useCallback, useEffect, useRef, useState } from "react";
++import type { Room } from "livekit-client";
++
++const API = process.env.NEXT_PUBLIC_VOICE_API_URL ?? "";
++
++type Lang = "ar-eg" | "en";
++type Status = "idle" | "connecting" | "live" | "error";
++type Msg = { id: string; role: "user" | "assistant"; text: string };
++
++const T = {
++  "ar-eg": {
++    title: "مساعد NEXVORA",
++    placeholder: "اكتب سؤالك عن خدماتنا…",
++    send: "إرسال",
++    mic: "تحدث",
++    micOff: "إيقاف المايك",
++    open: "افتح المساعد",
++    close: "إغلاق",
++    hello: "أهلاً! اسألني عن خدمات NEXVORA، أو اضغط على المايك وتكلم معايا.",
++    err: "حصلت مشكلة في الاتصال. جرّب تاني بعد شوية أو تواصل معانا من صفحة اتصل بنا.",
++    mic_denied: "محتاج إذن المايك عشان نتكلم صوت.",
++    dir: "rtl" as const,
++  },
++  en: {
++    title: "NEXVORA Assistant",
++    placeholder: "Ask about our services…",
++    send: "Send",
++    mic: "Talk",
++    micOff: "Stop mic",
++    open: "Open assistant",
++    close: "Close",
++    hello: "Hi! Ask me about NEXVORA's services, or tap the mic to talk.",
++    err: "Connection problem. Please try again shortly or use our contact page.",
++    mic_denied: "Microphone permission is needed for voice.",
++    dir: "ltr" as const,
++  },
++};
++
++export default function NexvoraAssistant() {
++  const [open, setOpen] = useState(false);
++  const [lang, setLang] = useState<Lang>("ar-eg");
++  const [status, setStatus] = useState<Status>("idle");
++  const [voice, setVoice] = useState(false);
++  const [msgs, setMsgs] = useState<Msg[]>([]);
++  const [input, setInput] = useState("");
++  const [notice, setNotice] = useState("");
++  const roomRef = useRef<Room | null>(null);
++  const modeRef = useRef<"text" | "voice" | null>(null);
++  const audioEls = useRef<HTMLMediaElement[]>([]);
++  const endRef = useRef<HTMLDivElement>(null);
++  const t = T[lang];
++
++  useEffect(() => {
++    endRef.current?.scrollIntoView({ behavior: "smooth" });
++  }, [msgs]);
++
++  const disconnect = useCallback(async () => {
++    audioEls.current.forEach((el) => el.remove());
++    audioEls.current = [];
++    await roomRef.current?.disconnect();
++    roomRef.current = null;
++    modeRef.current = null;
++    setStatus("idle");
++    setVoice(false);
++  }, []);
++
++  useEffect(() => () => void disconnect(), [disconnect]);
++
++  const upsert = (id: string, role: Msg["role"], text: string) =>
++    setMsgs((prev) => {
++      const i = prev.findIndex((m) => m.id === id);
++      if (i === -1) return [...prev, { id, role, text }];
++      const next = [...prev];
++      next[i] = { ...next[i], text };
++      return next;
++    });
++
++  const connect = useCallback(
++    async (mode: "text" | "voice") => {
++      if (roomRef.current && modeRef.current === mode) return roomRef.current;
++      await disconnect();
++      setStatus("connecting");
++      setNotice("");
++      try {
++        const res = await fetch(`${API}/token?lang=${lang}&mode=${mode}`);
++        if (!res.ok) throw new Error(String(res.status));
++        const { url, token } = (await res.json()) as { url: string; token: string };
++
++        const { Room, RoomEvent, Track } = await import("livekit-client");
++        const room = new Room();
++
++        room.on(RoomEvent.TrackSubscribed, (track) => {
++          if (track.kind === Track.Kind.Audio) {
++            const el = track.attach();
++            el.style.display = "none";
++            document.body.appendChild(el);
++            audioEls.current.push(el);
++          }
++        });
++        room.on(RoomEvent.Disconnected, () => {
++          if (roomRef.current === room) {
++            roomRef.current = null;
++            modeRef.current = null;
++            setStatus("idle");
++            setVoice(false);
++          }
++        });
++
++        // Agent replies (and the visitor's own speech transcripts) arrive on this topic.
++        room.registerTextStreamHandler("lk.transcription", async (reader, participant) => {
++          const attrs = reader.info.attributes ?? {};
++          const segId = attrs["lk.segment_id"] ?? reader.info.id;
++          const isMine = participant.identity === room.localParticipant.identity;
++          let text = "";
++          for await (const chunk of reader) {
++            text += chunk;
++            upsert(segId, isMine ? "user" : "assistant", text);
++          }
++        });
++
++        await room.connect(url, token);
++        if (mode === "voice") await room.localParticipant.setMicrophoneEnabled(true);
++        await room.startAudio();
++
++        roomRef.current = room;
++        modeRef.current = mode;
++        setStatus("live");
++        return room;
++      } catch (e) {
++        const denied = e instanceof Error && /permission|denied|notallowed/i.test(e.message);
++        setNotice(denied ? t.mic_denied : t.err);
++        setStatus("error");
++        await disconnect();
++        setStatus("error");
++        return null;
++      }
++    },
++    [disconnect, lang, t.err, t.mic_denied]
++  );
++
++  const sendText = async () => {
++    const text = input.trim();
++    if (!text) return;
++    setInput("");
++    upsert(`u-${Date.now()}`, "user", text);
++    const room = roomRef.current ?? (await connect("text"));
++    if (!room) return;
++    await room.localParticipant.sendText(text, { topic: "lk.chat" });
++  };
++
++  const toggleVoice = async () => {
++    if (voice) {
++      await disconnect();
++      return;
++    }
++    const room = await connect("voice");
++    if (room) setVoice(true);
++  };
++
++  const changeLang = async (l: Lang) => {
++    if (l === lang) return;
++    await disconnect(); // the agent's language is fixed per session
++    setLang(l);
++    setMsgs([]);
++  };
++
++  if (!API) return null;
++
++  return (
++    <div className="fixed bottom-4 end-4 z-50" dir={t.dir}>
++      {!open && (
++        <button
++          onClick={() => setOpen(true)}
++          aria-label={t.open}
++          className="h-14 w-14 rounded-full bg-[var(--primary)] text-white shadow-lg"
++        >
++          💬
++        </button>
++      )}
++
++      {open && (
++        <section
++          role="dialog"
++          aria-label={t.title}
++          className="flex h-[32rem] w-[22rem] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border bg-white text-black shadow-2xl"
++        >
++          <header className="flex items-center justify-between gap-2 bg-[var(--secondary)] px-4 py-3 text-white">
++            <strong className="text-sm">{t.title}</strong>
++            <div className="flex items-center gap-2">
++              <select
++                value={lang}
++                onChange={(e) => void changeLang(e.target.value as Lang)}
++                className="rounded bg-white/10 px-1 py-0.5 text-xs"
++                aria-label="Language"
++              >
++                <option value="ar-eg" className="text-black">عربي</option>
++                <option value="en" className="text-black">EN</option>
++              </select>
++              <button
++                onClick={() => {
++                  void disconnect();
++                  setOpen(false);
++                }}
++                aria-label={t.close}
++              >
++                ✕
++              </button>
++            </div>
++          </header>
++
++          <div className="flex-1 space-y-2 overflow-y-auto p-3 text-sm" aria-live="polite">
++            <p className="rounded-xl bg-gray-100 p-2">{t.hello}</p>
++            {msgs.map((m) => (
++              <p
++                key={m.id}
++                className={`max-w-[85%] whitespace-pre-wrap rounded-xl p-2 ${
++                  m.role === "user" ? "ms-auto bg-[var(--primary)] text-white" : "bg-gray-100"
++                }`}
++              >
++                {m.text}
++              </p>
++            ))}
++            {status === "connecting" && <p className="text-xs opacity-60">…</p>}
++            {notice && <p className="text-xs text-red-600">{notice}</p>}
++            <div ref={endRef} />
++          </div>
++
++          <div className="flex items-center gap-2 border-t p-2">
++            <button
++              onClick={() => void toggleVoice()}
++              aria-pressed={voice}
++              aria-label={voice ? t.micOff : t.mic}
++              className={`h-10 w-10 shrink-0 rounded-full ${voice ? "bg-red-600 text-white" : "bg-gray-200 text-[var(--secondary)]"}`}
++            >
++              🎤
++            </button>
++            <input
++              value={input}
++              onChange={(e) => setInput(e.target.value)}
++              onKeyDown={(e) => e.key === "Enter" && void sendText()}
++              placeholder={t.placeholder}
++              className="min-w-0 flex-1 rounded-lg border px-3 py-2 text-sm"
++            />
++            <button onClick={() => void sendText()} className="rounded-lg bg-[var(--primary)] px-3 py-2 text-sm text-white">
++              {t.send}
++            </button>
++          </div>
++        </section>
++      )}
++    </div>
++  );
++}
+diff --git a/package-lock.json b/package-lock.json
+index b7e51f1..4fd9b8e 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -8,6 +8,7 @@
+       "name": "agency-site",
+       "version": "0.1.0",
+       "dependencies": {
++        "livekit-client": "^2.22.3",
+         "next": "16.2.12",
+         "react": "19.2.4",
+         "react-dom": "19.2.4"
+@@ -67,7 +68,6 @@
+       "integrity": "sha512-RgHBCvtjbOK2gXSNBNIkNoEc9qoVEtau3hj8gEqKQuL3HZAibKarWFEI3Lfm6EYKkLalOh8eSrj9b+ch9H/VBA==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/code-frame": "^7.29.7",
+         "@babel/generator": "^7.29.7",
+@@ -277,6 +277,12 @@
+         "node": ">=6.9.0"
+       }
+     },
++    "node_modules/@bufbuild/protobuf": {
++      "version": "1.10.1",
++      "resolved": "https://registry.npmjs.org/@bufbuild/protobuf/-/protobuf-1.10.1.tgz",
++      "integrity": "sha512-wJ8ReQbHxsAfXhrf9ixl0aYbZorRuOWpBNzm8pL8ftmSxQx/wnJD5Eg861NwJU/czy2VXFIebCeZnZrI9rktIQ==",
++      "license": "(Apache-2.0 AND BSD-3-Clause)"
++    },
+     "node_modules/@emnapi/core": {
+       "version": "1.10.0",
+       "resolved": "https://registry.npmjs.org/@emnapi/core/-/core-1.10.0.tgz",
+@@ -284,7 +290,6 @@
+       "dev": true,
+       "license": "MIT",
+       "optional": true,
+-      "peer": true,
+       "dependencies": {
+         "@emnapi/wasi-threads": "1.2.1",
+         "tslib": "^2.4.0"
+@@ -296,7 +301,6 @@
+       "integrity": "sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA==",
+       "license": "MIT",
+       "optional": true,
+-      "peer": true,
+       "dependencies": {
+         "tslib": "^2.4.0"
+       }
+@@ -1038,6 +1042,21 @@
+         "@jridgewell/sourcemap-codec": "^1.4.14"
+       }
+     },
++    "node_modules/@livekit/mutex": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/@livekit/mutex/-/mutex-1.1.1.tgz",
++      "integrity": "sha512-EsshAucklmpuUAfkABPxJNhzj9v2sG7JuzFDL4ML1oJQSV14sqrpTYnsaOudMAw9yOaW53NU3QQTlUQoRs4czw==",
++      "license": "Apache-2.0"
++    },
++    "node_modules/@livekit/protocol": {
++      "version": "1.50.4",
++      "resolved": "https://registry.npmjs.org/@livekit/protocol/-/protocol-1.50.4.tgz",
++      "integrity": "sha512-L1uggNQAqyY21smQY8AllyOYbcv9Me9TaxwuLytL1R8ck9nbYPmQLNwEDi3pOFGAMa5F8I2nUi2Jc59W5awxlA==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "@bufbuild/protobuf": "^1.10.0"
++      }
++    },
+     "node_modules/@napi-rs/wasm-runtime": {
+       "version": "1.2.3",
+       "resolved": "https://registry.npmjs.org/@napi-rs/wasm-runtime/-/wasm-runtime-1.2.3.tgz",
+@@ -1550,6 +1569,13 @@
+         "tslib": "^2.4.0"
+       }
+     },
++    "node_modules/@types/dom-mediacapture-record": {
++      "version": "1.0.22",
++      "resolved": "https://registry.npmjs.org/@types/dom-mediacapture-record/-/dom-mediacapture-record-1.0.22.tgz",
++      "integrity": "sha512-mUMZLK3NvwRLcAAT9qmcK+9p7tpU2FHdDsntR3YI4+GY88XrgG4XiE7u1Q2LAN2/FZOz/tdMDC3GQCR4T8nFuw==",
++      "license": "MIT",
++      "peer": true
++    },
+     "node_modules/@types/estree": {
+       "version": "1.0.9",
+       "resolved": "https://registry.npmjs.org/@types/estree/-/estree-1.0.9.tgz",
+@@ -1587,7 +1613,6 @@
+       "integrity": "sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "csstype": "^3.2.2"
+       }
+@@ -1647,7 +1672,6 @@
+       "integrity": "sha512-fUBfTuuEulWqX6V8+O3PtScV01tzYYRUDTAirHFKoRAt7nOzoGiPt0M/bB47wWNy0coOOcgEwAMUtBpykMxl6w==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@typescript-eslint/scope-manager": "8.67.0",
+         "@typescript-eslint/types": "8.67.0",
+@@ -2228,7 +2252,6 @@
+       "integrity": "sha512-lGq+9yr1/GuAWaVYIHRjvvySG5/4VfKIvC8EWxStPdcDh/Ka7FG3twP6v4d5BkravUilhIAsG4Qj83t02LWUPQ==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "bin": {
+         "acorn": "bin/acorn"
+       },
+@@ -2572,7 +2595,6 @@
+         }
+       ],
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "baseline-browser-mapping": "^2.11.12",
+         "caniuse-lite": "^1.0.30001809",
+@@ -3162,7 +3184,6 @@
+       "integrity": "sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@eslint-community/eslint-utils": "^4.8.0",
+         "@eslint-community/regexpp": "^4.12.1",
+@@ -3563,6 +3584,15 @@
+         "node": ">=0.10.0"
+       }
+     },
++    "node_modules/events": {
++      "version": "3.3.0",
++      "resolved": "https://registry.npmjs.org/events/-/events-3.3.0.tgz",
++      "integrity": "sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=0.8.x"
++      }
++    },
+     "node_modules/fast-deep-equal": {
+       "version": "3.1.3",
+       "resolved": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz",
+@@ -4537,6 +4567,15 @@
+         "jiti": "lib/jiti-cli.mjs"
+       }
+     },
++    "node_modules/jose": {
++      "version": "6.2.12",
++      "resolved": "https://registry.npmjs.org/jose/-/jose-6.2.12.tgz",
++      "integrity": "sha512-9NiFmJEex0sy2Dk58j2UGBSHgUs2ypF9eZSu4L6vjOX3Dp96Sw1F3uL+H+D1sx02jZZdzUT0HgvCy59CuvXcWw==",
++      "license": "MIT",
++      "funding": {
++        "url": "https://github.com/sponsors/panva"
++      }
++    },
+     "node_modules/js-tokens": {
+       "version": "4.0.0",
+       "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz",
+@@ -4935,6 +4974,27 @@
+         "url": "https://opencollective.com/parcel"
+       }
+     },
++    "node_modules/livekit-client": {
++      "version": "2.22.3",
++      "resolved": "https://registry.npmjs.org/livekit-client/-/livekit-client-2.22.3.tgz",
++      "integrity": "sha512-jw9zBKXY5Gtr5MZ7vEON3QhMNccuDvYHck1PFSyG1aaateQPqgKZFBMgZkFZaXHIf9RV4MDW5xpTK2b/+qbwOg==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "@livekit/mutex": "1.1.1",
++        "@livekit/protocol": "1.50.4",
++        "events": "^3.3.0",
++        "jose": "^6.1.0",
++        "loglevel": "^1.9.2",
++        "machina": "^7.0.0",
++        "sdp-transform": "^2.15.0",
++        "tslib": "2.8.1",
++        "typed-emitter": "^2.1.0",
++        "webrtc-adapter": "9.0.6"
++      },
++      "peerDependencies": {
++        "@types/dom-mediacapture-record": "^1"
++      }
++    },
+     "node_modules/locate-path": {
+       "version": "6.0.0",
+       "resolved": "https://registry.npmjs.org/locate-path/-/locate-path-6.0.0.tgz",
+@@ -4958,6 +5018,19 @@
+       "dev": true,
+       "license": "MIT"
+     },
++    "node_modules/loglevel": {
++      "version": "1.9.2",
++      "resolved": "https://registry.npmjs.org/loglevel/-/loglevel-1.9.2.tgz",
++      "integrity": "sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg==",
++      "license": "MIT",
++      "engines": {
++        "node": ">= 0.6.0"
++      },
++      "funding": {
++        "type": "tidelift",
++        "url": "https://tidelift.com/funding/github/npm/loglevel"
++      }
++    },
+     "node_modules/loose-envify": {
+       "version": "1.4.0",
+       "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz",
+@@ -4981,6 +5054,15 @@
+         "yallist": "^3.0.2"
+       }
+     },
++    "node_modules/machina": {
++      "version": "7.0.1",
++      "resolved": "https://registry.npmjs.org/machina/-/machina-7.0.1.tgz",
++      "integrity": "sha512-0Xkgs8NeBvO2hW6bjJT8ewLWrMfh1haMPstaghpASWjXkLjRhtDiaJG1Kb7mslaOHxZYxpH7PIjpmirRVYbMMA==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=22.22"
++      }
++    },
+     "node_modules/magic-string": {
+       "version": "0.30.21",
+       "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.30.21.tgz",
+@@ -5554,7 +5636,6 @@
+       "resolved": "https://registry.npmjs.org/react/-/react-19.2.4.tgz",
+       "integrity": "sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==",
+       "license": "MIT",
+-      "peer": true,
+       "engines": {
+         "node": ">=0.10.0"
+       }
+@@ -5564,7 +5645,6 @@
+       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-19.2.4.tgz",
+       "integrity": "sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "scheduler": "^0.27.0"
+       },
+@@ -5702,6 +5782,16 @@
+         "queue-microtask": "^1.2.2"
+       }
+     },
++    "node_modules/rxjs": {
++      "version": "7.8.2",
++      "resolved": "https://registry.npmjs.org/rxjs/-/rxjs-7.8.2.tgz",
++      "integrity": "sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==",
++      "license": "Apache-2.0",
++      "optional": true,
++      "dependencies": {
++        "tslib": "^2.1.0"
++      }
++    },
+     "node_modules/safe-array-concat": {
+       "version": "1.1.4",
+       "resolved": "https://registry.npmjs.org/safe-array-concat/-/safe-array-concat-1.1.4.tgz",
+@@ -5763,6 +5853,21 @@
+       "integrity": "sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==",
+       "license": "MIT"
+     },
++    "node_modules/sdp": {
++      "version": "3.2.2",
++      "resolved": "https://registry.npmjs.org/sdp/-/sdp-3.2.2.tgz",
++      "integrity": "sha512-xZocWwfyp4hkbN4hLWxMjmv2Q8aNa9MhmOZ7L9aCZPT+dZsgRr6wZRrSYE3HTdyk/2pZKPSgqI7ns7Een1xMSA==",
++      "license": "MIT"
++    },
++    "node_modules/sdp-transform": {
++      "version": "2.15.0",
++      "resolved": "https://registry.npmjs.org/sdp-transform/-/sdp-transform-2.15.0.tgz",
++      "integrity": "sha512-KrOH82c/W+GYQ0LHqtr3caRpM3ITglq3ljGUIb8LTki7ByacJZ9z+piSGiwZDsRyhQbYBOBJgr2k6X4BZXi3Kw==",
++      "license": "MIT",
++      "bin": {
++        "sdp-verify": "checker.js"
++      }
++    },
+     "node_modules/semver": {
+       "version": "6.3.1",
+       "resolved": "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz",
+@@ -6257,7 +6362,6 @@
+       "integrity": "sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "engines": {
+         "node": ">=12"
+       },
+@@ -6414,13 +6518,21 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
++    "node_modules/typed-emitter": {
++      "version": "2.1.0",
++      "resolved": "https://registry.npmjs.org/typed-emitter/-/typed-emitter-2.1.0.tgz",
++      "integrity": "sha512-g/KzbYKbH5C2vPkaXGu8DJlHrGKHLsM25Zg9WuC9pMGfuvT+X25tZQWo5fK1BjBm8+UrVE9LDCvaY0CQk+fXDA==",
++      "license": "MIT",
++      "optionalDependencies": {
++        "rxjs": "*"
++      }
++    },
+     "node_modules/typescript": {
+       "version": "5.9.3",
+       "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz",
+       "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
+       "dev": true,
+       "license": "Apache-2.0",
+-      "peer": true,
+       "bin": {
+         "tsc": "bin/tsc",
+         "tsserver": "bin/tsserver"
+@@ -6558,6 +6670,19 @@
+         "punycode": "^2.1.0"
+       }
+     },
++    "node_modules/webrtc-adapter": {
++      "version": "9.0.6",
++      "resolved": "https://registry.npmjs.org/webrtc-adapter/-/webrtc-adapter-9.0.6.tgz",
++      "integrity": "sha512-CHbl2ZQbxx164IgWRgzJno4hWtM4tFbRam1QfI3Yxhs3w/DvqluVxVWeXs3oL5/fbGkSNLKo0Ty5MgUWceNhog==",
++      "license": "BSD-3-Clause",
++      "dependencies": {
++        "sdp": "^3.2.0"
++      },
++      "engines": {
++        "node": ">=6.0.0",
++        "npm": ">=3.10.0"
++      }
++    },
+     "node_modules/which": {
+       "version": "2.0.2",
+       "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
+@@ -6699,7 +6824,6 @@
+       "integrity": "sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "funding": {
+         "url": "https://github.com/sponsors/colinhacks"
+       }
+diff --git a/package.json b/package.json
+index 3453784..5bbd0f6 100644
+--- a/package.json
++++ b/package.json
+@@ -9,6 +9,7 @@
+     "lint": "eslint"
+   },
+   "dependencies": {
++    "livekit-client": "^2.22.3",
+     "next": "16.2.12",
+     "react": "19.2.4",
+     "react-dom": "19.2.4"
+diff --git a/public/.well-known/agent-skills/index.json b/public/.well-known/agent-skills/index.json
+new file mode 100644
+index 0000000..4368fdf
+--- /dev/null
++++ b/public/.well-known/agent-skills/index.json
+@@ -0,0 +1,12 @@
++{
++  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
++  "skills": [
++    {
++      "name": "nexvora-services",
++      "type": "skill-md",
++      "description": "Explains what NEXVORA offers and how to start a project or contact the team.",
++      "url": "/.well-known/agent-skills/nexvora-services/SKILL.md",
++      "digest": "sha256:f73f4e30f8d1be7c17de658217ada3ec023866a77ed5730f511b6d75ab024680"
++    }
++  ]
++}
+diff --git a/public/.well-known/agent-skills/nexvora-services/SKILL.md b/public/.well-known/agent-skills/nexvora-services/SKILL.md
+new file mode 100644
+index 0000000..9d85e77
+--- /dev/null
++++ b/public/.well-known/agent-skills/nexvora-services/SKILL.md
+@@ -0,0 +1,15 @@
++---
++name: nexvora-services
++description: Explains what NEXVORA (a technology solutions company based in Egypt) offers and how to start a project or contact the team. Use when a user asks about NEXVORA's services or wants to hire them.
++---
++
++# NEXVORA services
++
++NEXVORA is a technology solutions company based in Egypt serving clients worldwide.
++
++## Services
++Tech Talent, Product Engineering, Web design & Development, Page Speed Optimization, Mobile Applications, WordPress and Shopify, Digital Marketing, Brand Identity & Graphic Design, IT Infrastructure, Managed Hosting Services, Cybersecurity & Recovery Service, AI Consultation.
++Each service has a page at https://nexvoraagency.com/service/<slug>/ (see https://nexvoraagency.com/llms.txt for the full list).
++
++## How to start a project
++Send the user to https://nexvoraagency.com/contact-us/. Do not promise prices, timelines, or availability; the NEXVORA team confirms these directly.
+diff --git a/public/llms.txt b/public/llms.txt
+new file mode 100644
+index 0000000..befd16f
+--- /dev/null
++++ b/public/llms.txt
+@@ -0,0 +1,27 @@
++# NEXVORA
++
++> NEXVORA is a technology solutions company based in Egypt. It designs, builds, and optimizes digital products, marketing systems, and business technology for organizations worldwide, with access to a talent pool in Egypt and the US.
++
++NEXVORA offers software development, SaaS products, IT infrastructure, digital marketing and advertising, consultations, and training.
++
++## Services
++- [Tech Talent](https://nexvoraagency.com/service/tech-talent/): Access to engineering talent in Egypt and the US to fit an organization's technology and business needs.
++- [Product Engineering](https://nexvoraagency.com/service/product-engineering/): Design and engineering of digital products.
++- [Web design & Development](https://nexvoraagency.com/service/web-development/): Websites and web applications, including CMS and PHP work.
++- [Page Speed Optimization](https://nexvoraagency.com/service/page-speed-optimization/): Improving website loading performance.
++- [Mobile Applications](https://nexvoraagency.com/service/mobile-applications/): Android and iOS applications.
++- [WordPress and Shopify](https://nexvoraagency.com/service/wordpress-and-shopify/): WordPress and Shopify websites and stores.
++- [Digital Marketing](https://nexvoraagency.com/service/digital-marketing-advertising/): Data-driven digital marketing and advertising.
++- [Brand Identity & Graphic Design](https://nexvoraagency.com/service/brand-identity-graphic-design/): Brand identity and graphic design.
++- [IT Infrastructure](https://nexvoraagency.com/service/it-infrastructure/): Cloud and IT infrastructure for performance, connectivity, security, and operations.
++- [Managed Hosting Services](https://nexvoraagency.com/service/managed-hosting-services/): Managed hosting.
++- [Cybersecurity & Recovery Service](https://nexvoraagency.com/service/cybersecurity-recovery-service/): Security, SSL, monitoring, and recovery.
++- [AI Consultation](https://nexvoraagency.com/service/ai-consultation/): AI consulting.
++
++## Company
++- [About us](https://nexvoraagency.com/about-us/): Who NEXVORA is and how it works.
++- [Blog](https://nexvoraagency.com/blog/): Articles from the NEXVORA team.
++- [Contact us](https://nexvoraagency.com/contact-us/): Start a project or ask a question.
++
++## Optional
++- [Sitemap](https://nexvoraagency.com/sitemap.xml)
+diff --git a/public/robots.txt b/public/robots.txt
+new file mode 100644
+index 0000000..baaf4e8
+--- /dev/null
++++ b/public/robots.txt
+@@ -0,0 +1,17 @@
++User-agent: *
++Allow: /
++Content-Signal: search=yes, ai-input=yes, ai-train=no
++
++User-agent: GPTBot
++Allow: /
++
++User-agent: ClaudeBot
++Allow: /
++
++User-agent: PerplexityBot
++Allow: /
++
++User-agent: Google-Extended
++Allow: /
++
++Sitemap: https://nexvoraagency.com/sitemap.xml
+-- 
+2.43.0
+

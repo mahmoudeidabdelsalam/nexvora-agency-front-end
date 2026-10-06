@@ -1,0 +1,27 @@
+# NEXVORA
+
+> NEXVORA is a technology solutions company based in Egypt. It designs, builds, and optimizes digital products, marketing systems, and business technology for organizations worldwide, with access to a talent pool in Egypt and the US.
+
+NEXVORA offers software development, SaaS products, IT infrastructure, digital marketing and advertising, consultations, and training.
+
+## Services
+- [Tech Talent](https://nexvoraagency.com/service/tech-talent/): Access to engineering talent in Egypt and the US to fit an organization's technology and business needs.
+- [Product Engineering](https://nexvoraagency.com/service/product-engineering/): Design and engineering of digital products.
+- [Web design & Development](https://nexvoraagency.com/service/web-development/): Websites and web applications, including CMS and PHP work.
+- [Page Speed Optimization](https://nexvoraagency.com/service/page-speed-optimization/): Improving website loading performance.
+- [Mobile Applications](https://nexvoraagency.com/service/mobile-applications/): Android and iOS applications.
+- [WordPress and Shopify](https://nexvoraagency.com/service/wordpress-and-shopify/): WordPress and Shopify websites and stores.
+- [Digital Marketing](https://nexvoraagency.com/service/digital-marketing-advertising/): Data-driven digital marketing and advertising.
+- [Brand Identity & Graphic Design](https://nexvoraagency.com/service/brand-identity-graphic-design/): Brand identity and graphic design.
+- [IT Infrastructure](https://nexvoraagency.com/service/it-infrastructure/): Cloud and IT infrastructure for performance, connectivity, security, and operations.
+- [Managed Hosting Services](https://nexvoraagency.com/service/managed-hosting-services/): Managed hosting.
+- [Cybersecurity & Recovery Service](https://nexvoraagency.com/service/cybersecurity-recovery-service/): Security, SSL, monitoring, and recovery.
+- [AI Consultation](https://nexvoraagency.com/service/ai-consultation/): AI consulting.
+
+## Company
+- [About us](https://nexvoraagency.com/about-us/): Who NEXVORA is and how it works.
+- [Blog](https://nexvoraagency.com/blog/): Articles from the NEXVORA team.
+- [Contact us](https://nexvoraagency.com/contact-us/): Start a project or ask a question.
+
+## Optional
+- [Sitemap](https://nexvoraagency.com/sitemap.xml)

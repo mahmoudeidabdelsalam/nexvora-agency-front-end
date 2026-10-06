@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/layout/Header";
+import NexvoraAssistant from "@/components/assistant/NexvoraAssistant";
 import { getHeaderData } from "@/lib/wordpress";
 
 export const metadata: Metadata = {
@@ -48,6 +49,7 @@ export default async function RootLayout({
           ctaHref={headerFields.linkButtonRight?.url || "/contact"}
         />
         {children}
+        <NexvoraAssistant />
       </body>
     </html>
   );

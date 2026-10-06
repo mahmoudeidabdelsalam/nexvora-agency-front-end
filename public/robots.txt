@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://nexvoraagency.com/sitemap.xml

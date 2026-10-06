@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "nexvora-services",
+      "type": "skill-md",
+      "description": "Explains what NEXVORA offers and how to start a project or contact the team.",
+      "url": "/.well-known/agent-skills/nexvora-services/SKILL.md",
+      "digest": "sha256:f73f4e30f8d1be7c17de658217ada3ec023866a77ed5730f511b6d75ab024680"
+    }
+  ]
+}

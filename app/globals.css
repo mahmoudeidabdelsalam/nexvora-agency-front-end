@@ -552,7 +552,7 @@ iframe {
     position: fixed;
     z-index: 9999;
     bottom: 20px;
-    right: 20px;
+    left: 20px;
     width: 52px;
     height: 52px;
     background: #25D366;
