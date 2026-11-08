@@ -62,7 +62,7 @@ export default async function ContactPage() {
                   )}
 
                   {info.link ? (
-                    <Link href={info.link} className="text-[#262263] hover:text-[#0b97ab] text-xl">
+                    <Link prefetch={false} href={info.link} className="text-[#262263] hover:text-[#0b97ab] text-xl">
                       {info.text}
                     </Link>
                   ) : (

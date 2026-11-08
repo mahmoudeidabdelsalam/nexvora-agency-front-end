@@ -65,7 +65,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
             : "border-[rgba(16,25,54,0.05)] bg-[rgba(255,255,255,0.72)] shadow-[0_4px_16px_rgba(15,23,42,0.02)] backdrop-blur-[18px]",
         ].join(" ")}
       >
-        <Link href="/" className="flex items-center gap-3 transition-transform duration-200 hover:scale-[1.02]">
+        <Link prefetch={false} href="/" className="flex items-center gap-3 transition-transform duration-200 hover:scale-[1.02]">
           <img src={logoUrl} alt="Agency logo" className="h-10 w-auto sm:h-12" />
         </Link>
 
@@ -123,7 +123,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
                 >
                   <div className="flex items-center gap-1.5">
                     {!hasSubmenu && (
-                      <Link
+                      <Link prefetch={false}
                         href={itemHref}
                         className={[
                           "group relative flex items-center gap-1.5 text-[15px] font-medium uppercase leading-none tracking-[-0.01em] text-(--secondary) transition-colors duration-250 ease-out hover:text-(--primary)",
@@ -193,7 +193,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
                         ].join(" ")}
                       >
                         {item.submenu?.map((subItem) => (
-                          <Link
+                          <Link prefetch={false}
                             key={subItem.label}
                             href={normalizePath(subItem.link?.url || "/")}
                             className="block rounded-md px-3 py-2.5 text-[12px] font-medium uppercase tracking-[0.08em] text-(--secondary) transition-colors duration-200 hover:bg-[#f7fbfc] hover:text-(--primary)"
@@ -210,7 +210,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
             })}
           </nav>
 
-          <Link
+          <Link prefetch={false}
             href={ctaHref}
             className="group hidden items-center gap-2 rounded-md  px-5 py-2.5 text-sm font-semibold uppercase tracking-[-0.01em] text-[#0b97ab] border border-[#0b97ab] transition-all duration-250 ease-out hover:brightness-110 md:inline-flex"
           >
@@ -226,7 +226,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
             {navItems.map((item) => (
               <div key={item.label}>
                 <div className="flex items-center justify-between rounded-md px-3 py-2.5">
-                  <Link href={normalizePath(item.link?.url || "/")} className="text-sm font-medium uppercase tracking-[-0.01em] text-(--secondary)" onClick={() => setMobileOpen(false)}>
+                  <Link prefetch={false} href={normalizePath(item.link?.url || "/")} className="text-sm font-medium uppercase tracking-[-0.01em] text-(--secondary)" onClick={() => setMobileOpen(false)}>
                     {item.label}
                   </Link>
                   {item.submenu?.length ? (
@@ -242,7 +242,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
                 {item.submenu?.length && openMenu === item.label ? (
                   <div className="space-y-1 rounded-xl bg-[#f7fbfc] p-2">
                     {item.submenu.map((subItem) => (
-                      <Link
+                      <Link prefetch={false}
                         key={subItem.label}
                         href={normalizePath(subItem.link?.url || "/")}
                         className="block rounded-[10px] px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-(--secondary) transition-colors hover:bg-white hover:text-(--primary)"
@@ -256,7 +256,7 @@ export default function Header({ logoUrl, menu, ctaLabel, ctaHref }: HeaderProps
               </div>
             ))}
           </div>
-          <Link
+          <Link prefetch={false}
             href={ctaHref}
             className="group mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[linear-gradient(135deg,#4F46FF_0%,#7C3AED_52%,#5B8CFF_100%)] px-4 py-3 text-sm font-semibold uppercase tracking-[-0.01em] text-white shadow-[0_12px_28px_rgba(79,70,255,0.2)] transition-all duration-250 hover:brightness-110"
             onClick={() => setMobileOpen(false)}

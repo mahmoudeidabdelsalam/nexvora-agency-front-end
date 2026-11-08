@@ -28,7 +28,7 @@ export default function Stats({ stats, heading, subheading }: { stats: ServiceLi
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 md:grid-cols-2 relative z-2">
         {stats.map((stat, index) => (
           <ScrollReveal key={index} animation="fadeInLeft" delay={index * 120}>
-            <Link 
+            <Link prefetch={false} 
               className="rounded-md border flex items-center gap-4 border-white/10 bg-black/40 px-5 py-3 backdrop-blur opacity-90 transition-opacity hover:opacity-100"
                href={`/service/${stat.slug}`}
             >

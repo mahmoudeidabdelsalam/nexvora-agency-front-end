@@ -38,7 +38,7 @@ export default async function CatchAllPage({
           </h1>
           <div className="mt-8 prose max-w-none text-slate-600" dangerouslySetInnerHTML={{ __html: page?.content || "<p>This page is rendered from WordPress content.</p>" }} />
           <div className="mt-10">
-            <Link href="/" className="text-sm font-semibold text-[#0997AA]">← Back home</Link>
+            <Link prefetch={false} href="/" className="text-sm font-semibold text-[#0997AA]">← Back home</Link>
           </div>
         </div>
       </main>
