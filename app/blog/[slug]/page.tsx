@@ -89,7 +89,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           <div className="prose max-w-none text-slate-600 content-single" dangerouslySetInnerHTML={{ __html: post?.content ?? "<p>This page is rendered from WordPress content.</p>" }} />
           <div className="mt-10">
-            <Link href="/blog" className="text-sm font-semibold text-[#0997AA]">← Back to blog</Link>
+            <Link prefetch={false} href="/blog" className="text-sm font-semibold text-[#0997AA]">← Back to blog</Link>
           </div>
         </div>
       </main>

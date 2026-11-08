@@ -101,7 +101,7 @@ export default function Footer({ bgimageurl, ctaLabel, ctaLink }: FooterProps) {
 
                   return (
                     <li key={item.label}>
-                      <Link href={item.url} className="transition-colors hover:text-[#0997AA]">
+                      <Link prefetch={false} href={item.url} className="transition-colors hover:text-[#0997AA]">
                         {item.label}
                       </Link>
                     </li>

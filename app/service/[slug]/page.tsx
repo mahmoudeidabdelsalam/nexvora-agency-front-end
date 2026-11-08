@@ -38,7 +38,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
             <Projects projects={service.serviceFields.projects} widthCol="1" />
           )}
           <div className="mt-10 px-6 lg:px-8">
-            <Link href="/" className="text-sm font-semibold text-[#0997AA]">← Back to home</Link>
+            <Link prefetch={false} href="/" className="text-sm font-semibold text-[#0997AA]">← Back to home</Link>
           </div>
         </div>
       </main>
