@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Room } from "livekit-client";
+import type { Room, RoomEvent as RoomEventType } from "livekit-client";
 
 const VOICE_API_URL = process.env.NEXT_PUBLIC_VOICE_API_URL?.trim();
 
@@ -46,6 +46,37 @@ const COPY = {
     microphoneError: "يلزم السماح باستخدام الميكروفون للمحادثة الصوتية. راجع إعدادات المتصفح وحاول مرة أخرى.",
   },
 } as const;
+
+/**
+ * The agent is dispatched after the visitor joins and takes a few seconds to
+ * start. Text sent before it is in the room has no recipient and is lost, so
+ * wait for it. Resolves false on timeout or if the room disconnects first.
+ */
+function waitForAgent(
+  room: Room,
+  RoomEvent: typeof RoomEventType,
+  timeoutMs = 20000,
+): Promise<boolean> {
+  const hasAgent = () =>
+    Array.from(room.remoteParticipants.values()).some((participant) => participant.isAgent);
+  if (hasAgent()) return Promise.resolve(true);
+
+  return new Promise((resolve) => {
+    const finish = (result: boolean) => {
+      clearTimeout(timer);
+      room.off(RoomEvent.ParticipantConnected, onJoin);
+      room.off(RoomEvent.Disconnected, onDisconnect);
+      resolve(result);
+    };
+    const onJoin = () => {
+      if (hasAgent()) finish(true);
+    };
+    const onDisconnect = () => finish(false);
+    const timer = setTimeout(() => finish(hasAgent()), timeoutMs);
+    room.on(RoomEvent.ParticipantConnected, onJoin);
+    room.on(RoomEvent.Disconnected, onDisconnect);
+  });
+}
 
 function isVoiceTokenResponse(value: unknown): value is VoiceTokenResponse {
   if (typeof value !== "object" || value === null) return false;
@@ -224,6 +255,15 @@ export default function NexvoraAssistant() {
     try {
       const room = roomRef.current ?? (await connect("text"));
       if (!room) return;
+      setStatus("connecting");
+      const { RoomEvent } = await import("livekit-client");
+      const agentReady = await waitForAgent(room, RoomEvent);
+      if (roomRef.current !== room) return;
+      setStatus("connected");
+      if (!agentReady) {
+        setError(copy.error);
+        return;
+      }
       await room.localParticipant.sendText(text, { topic: "lk.chat" });
     } catch (cause) {
       console.error("Unable to send a message to the NEXVORA LiveKit assistant.", cause);
